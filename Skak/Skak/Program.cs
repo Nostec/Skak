@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Skakspil {
+namespace Skak {
     class Program {
         static void Main(string[] args) {
             Print();
