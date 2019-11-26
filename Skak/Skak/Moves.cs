@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace SKak
+namespace Skak
 {
     public class Moves
     {
@@ -22,10 +22,10 @@ namespace SKak
             {
                 { "sr","sh","sb","sq","sk","sb","sh","sr"},
                 { "sp","sp","sp","sp","sp","sp","sp","sp"},
-                { "n","n","n","n","n","n","n","n"},
-                { "n","n","n","n","n","n","n","n"},
-                { "n","n","n","n","n","n","n","n"},
-                { "n","n","n","n","n","n","n","n"},
+                { "nn","nn","nn","nn","nn","nn","nn","nn"},
+                { "nn","nn","nn","nn","nn","nn","nn","nn"},
+                { "nn","nn","nn","nn","nn","nn","nn","nn"},
+                { "nn","nn","nn","nn","nn","nn","nn","nn"},
                 { "hp","hp","hp","hp","hp","hp","hp","hp"},
                 { "hr","hh","hb","hq","hk","hb","hh","hr"}
             };
@@ -34,10 +34,10 @@ namespace SKak
             {
                 { "sr","sh","sb","sq","sk","sb","sh","sr"},
                 { "sp","sp","sp","sp","sp","sp","sp","sp"},
-                { "n","n","n","n","n","n","n","n"},
-                { "n","n","n","n","n","n","n","n"},
-                { "n","n","n","n","n","n","n","n"},
-                { "n","n","n","n","n","n","n","n"},
+                { "nn","nn","nn","nn","nn","nn","nn","nn"},
+                { "nn","nn","nn","nn","nn","nn","nn","nn"},
+                { "nn","nn","nn","nn","nn","nn","nn","nn"},
+                { "nn","nn","nn","nn","nn","nn","nn","nn"},
                 { "hp","hp","hp","hp","hp","hp","hp","hp"},
                 { "hr","hh","hb","hq","hk","hb","hh","hr"}
             };
