@@ -1,12 +1,14 @@
 ﻿using System;
 
 namespace Skak {
-    class Program {
+    class Program {       
+
         static void Main(string[] args) {
             Print();
+            
             Console.ReadKey();
         }
-
+        
         static void Print() {
             Console.WriteLine("     [a][b][c][d][e][f][g][h]");
             string[,] board = new string[8, 9]{
@@ -25,6 +27,7 @@ namespace Skak {
                 }
                 Console.Write(Environment.NewLine + Environment.NewLine);
             }
+            
         }
 
     }
