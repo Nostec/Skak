@@ -30,5 +30,15 @@ namespace Skak {
             
         }
 
+        private void ClearCurrentConsoleLine() {
+            int currentLineCursor = 0;
+            for (int i = 0; i < 15; i++) {
+                Console.SetCursorPosition(0, currentLineCursor);
+                Console.Write(new string(' ', Console.WindowWidth));
+
+                currentLineCursor++;
+            }
+        } //Overskriver de forrige strings for ikke at skabe en "flashing" effeks som Console.Clear()
+
     }
 }
