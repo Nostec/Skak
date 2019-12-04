@@ -29,6 +29,7 @@ namespace Skak
             //code to move the specific piece to another specific spot
             //add exceptions for: if other piece is there(friendly & enemy), where it can move
             int piece = grid[x, y];
+            int availableMovePosCheck;
             switch (piece) {
                 case (int)Pieces.Null:
                     //error message: Kan ikke rykke med et tomt felt
@@ -49,7 +50,8 @@ namespace Skak
                     //do stuff
                     break;
                 case (int)Pieces.BlackPawn:
-                    //do stuff
+                    availableMovePosCheck = grid[x + 1, y];
+                    
                     break;
                 case (int)Pieces.WhiteKing:
                     //do stuff
@@ -70,6 +72,17 @@ namespace Skak
                     //do stuff
                     break;
             }
+        }
+
+        public void PerformMove() {
+            // SetCursorPosition
+            // Input indtil videre, skal ændres
+            int inputX = 0;
+            int inputY = 0;
+            int pieceOnInput;
+
+            pieceOnInput = grid[inputX, inputY];
+
         }
 
         public void SetPiecePositions(){
