@@ -9,92 +9,293 @@ namespace Skak
     class Moves : Exceptions
     {
         ///Den enum under (Pieces) bruges med en offset 
-        ///Der skal -6 på hver gang for Null bliver 0
+        ///Der skal -9 på hver gang for Null bliver 0
         public enum Pieces {
-            BlackKing, BlackQueen, BlackBishop, BlackKnight, BlackTower, BlackPawn,
+            BlackKing, BlackQueen, BlackBishop2, BlackBishop, BlackKnight2, BlackKnight, BlackTower2, BlackTower, BlackPawn,
             Null, //skal bruges som 0
-            WhitePawn, WhiteTower, WhiteKnight, WhiteBishop, WhiteQueen, WhiteKing
+            WhitePawn, WhiteTower, WhiteTower2, WhiteKnight, WhiteKnight2, WhiteBishop, WhiteBishop2, WhiteQueen, WhiteKing
         };
 
-        int[,] grid;
-        
+        List<Piece> pieces = new List<Piece>();
+
+        ///Sorte brikker har - foran brikkens identitet, hvide har ingen
+        ///Rook/Tårn = 2&3, Springer/Knight = 4&5 Bishop/Løber = 6&7
+        ///Queen = 8, King = 9, Pawn = 1
+        ///Ingen brik = 0
+        int[,] grid = new int[8, 8]{
+            {-2,-4,-6,-8,-9,-7,-5,-3},
+            {-1,-1,-1,-1,-1,-1,-1,-1},
+            { 0, 0, 0, 0, 0, 0, 0, 0},
+            { 0, 0, 0, 0, 0, 0, 0, 0},
+            { 0, 0, 0, 0, 0, 0, 0, 0},
+            { 0, 0, 0, 0, 0, 0, 0, 0},
+            { 1, 1, 1, 1, 1, 1, 1, 1},
+            { 2, 4, 6, 8, 9, 7, 5, 3}
+        };
+
         //Sender videre til de metoder der gøres brug af for at omlokaliserer en brik
         public void PieceRelocation(int x, int y, int reloX, int reloY) {
             
-            MovePiecePosition(x, y, reloX, reloY);
+            //MovePiecePosition(x, y, reloX, reloY);
         }
 
-        //
-        private void MovePiecePosition(int x, int y, int reloX, int reloY) {
-            //code to move the specific piece to another specific spot
-            //add exceptions for: if other piece is there(friendly & enemy), where it can move
-            int piece = grid[x, y];
+
+        private void PieceIdentification(int x, int y) {
+            Piece brik = new Piece();
+            int piece = grid[y, x];
+
             switch (piece) {
-                case (int)Pieces.Null:
+                case (int)Pieces.Null-9:
+                    Piece Null;
+                    if (PieceExistsCheck("Null", "Null") != true) {
+                        Null = new Piece();
+                        PieceCreateValues(Null, (int)Pieces.Null - 9, "Null", "Null");
+                    }
                     //error message: Kan ikke rykke med et tomt felt
                     break;
-                case (int)Pieces.BlackKing:
-                    //do stuff
+
+                case (int)Pieces.BlackKing-9:
+                    Piece BlackKing;
+                    if (PieceExistsCheck("King", "Black") != true) {
+                        BlackKing = new Piece();
+                        PieceCreateValues(BlackKing, (int)Pieces.BlackKing - 9, "King", "Black");
+                    }
+                    else {
+                        //do stuff
+                    }
                     break;
-                case (int)Pieces.BlackQueen:
-                    //do stuff
+
+                case (int)Pieces.BlackQueen-9:
+                    Piece BlackQueen;
+                    if (PieceExistsCheck("Queen", "Black") != true) {
+                        BlackQueen = new Piece();
+                        PieceCreateValues(BlackQueen, (int)Pieces.BlackQueen - 9, "Queen", "Black");
+                    }
+                    else {
+                        //do stuff
+                    }
                     break;
-                case (int)Pieces.BlackBishop:
-                    //do stuff
+
+                case (int)Pieces.BlackBishop-9:
+                    Piece BlackBishop;
+                    if (PieceExistsCheck("Bishop", "Black") != true) {
+                        BlackBishop = new Piece();
+                        PieceCreateValues(BlackBishop, (int)Pieces.BlackBishop - 9, "Bishop", "Black");
+                    }
+                    else {
+                        //do stuff
+                    }
                     break;
-                case (int)Pieces.BlackKnight:
-                    //do stuff
+
+                case (int)Pieces.BlackBishop2-9:
+                    Piece BlackBishop2;
+                    if (PieceExistsCheck("Bishop2", "Black") != true) {
+                        BlackBishop2 = new Piece();
+                        PieceCreateValues(BlackBishop2, (int)Pieces.BlackBishop2 - 9, "Bishop2", "Black");
+                    }
+                    else {
+                        //do stuff
+                    }
                     break;
-                case (int)Pieces.BlackTower:
-                    //do stuff
+
+                case (int)Pieces.BlackKnight-9:
+                    Piece BlackKnight;
+                    if (PieceExistsCheck("Knight", "Black") != true) {
+                        BlackKnight = new Piece();
+                        PieceCreateValues(BlackKnight, (int)Pieces.BlackKnight - 9, "Knight", "Black");
+                    }
+                    else {
+                        //do stuff
+                    }
                     break;
-                case (int)Pieces.BlackPawn:
-                    //do stuff
+
+                case (int)Pieces.BlackKnight2-9:
+                    Piece BlackKnight2;
+                    if (PieceExistsCheck("Knight2", "Black") != true) {
+                        BlackKnight2 = new Piece();
+                        PieceCreateValues(BlackKnight2, (int)Pieces.BlackKnight2 - 9, "Knight2", "Black");
+                    }
+                    else {
+                        //do stuff
+                    }
                     break;
-                case (int)Pieces.WhiteKing:
-                    //do stuff
+
+                case (int)Pieces.BlackTower-9:
+                    Piece BlackTower;
+                    if (PieceExistsCheck("Tower", "Black") != true) {
+                        BlackTower = new Piece();
+                        PieceCreateValues(BlackTower, (int)Pieces.BlackTower - 9, "Tower", "Black");
+                    }
+                    else {
+                        //do stuff
+                    }
                     break;
-                case (int)Pieces.WhiteQueen:
-                    //do stuff
+
+                case (int)Pieces.BlackTower2-9:
+                    Piece BlackTower2;
+                    if (PieceExistsCheck("Tower2", "Black") != true) {
+                        BlackTower2 = new Piece();
+                        PieceCreateValues(BlackTower2, (int)Pieces.BlackTower2 - 9, "Tower2", "Black");
+                    }
+                    else {
+                        //do stuff
+                    }
                     break;
-                case (int)Pieces.WhiteBishop:
-                    //do stuff
+
+                case (int)Pieces.BlackPawn-9:
+                    Piece BlackPawn;
+                    if (PieceExistsCheck("Pawn", "Black") != true) {
+                        BlackPawn = new Piece();
+                        PieceCreateValues(BlackPawn, (int)Pieces.BlackPawn - 9, "Pawn", "Black");
+                    }
+                    else {
+                        //do stuff
+                    }
                     break;
-                case (int)Pieces.WhiteKnight:
-                    //do stuff
+
+                case (int)Pieces.WhiteKing - 9:
+                    Piece WhiteKing;
+                    if (PieceExistsCheck("King", "White") != true) {
+                        WhiteKing = new Piece();
+                        PieceCreateValues(WhiteKing, (int)Pieces.WhiteKing - 9, "King", "White");
+                    }
+                    else {
+                        //do stuff
+                    }
                     break;
-                case (int)Pieces.WhiteTower:
-                    //do stuff
+
+                case (int)Pieces.WhiteQueen - 9:
+                    Piece WhiteQueen;
+                    if (PieceExistsCheck("Queen", "White") != true) {
+                        WhiteQueen = new Piece();
+                        PieceCreateValues(WhiteQueen, (int)Pieces.WhiteQueen - 9, "Queen", "White");
+                    }
+                    else {
+                        //do stuff
+                    }
                     break;
-                case (int)Pieces.WhitePawn:
-                    //do stuff
+
+                case (int)Pieces.WhiteBishop - 9:
+                    Piece WhiteBishop;
+                    if (PieceExistsCheck("Bishop", "White") != true) {
+                        WhiteBishop = new Piece();
+                        PieceCreateValues(WhiteBishop, (int)Pieces.WhiteBishop - 9, "Bishop", "White");
+                    }
+                    else {
+                        //do stuff
+                    }
+                    break;
+
+                case (int)Pieces.WhiteBishop2 - 9:
+                    Piece WhiteBishop2;
+                    if (PieceExistsCheck("Bishop2", "White") != true) {
+                        WhiteBishop2 = new Piece();
+                        PieceCreateValues(WhiteBishop2, (int)Pieces.WhiteBishop2 - 9, "Bishop2", "White");
+                    }
+                    else {
+                        //do stuff
+                    }
+                    break;
+
+                case (int)Pieces.WhiteKnight - 9:
+                    Piece WhiteKnight;
+                    if (PieceExistsCheck("Knight", "White") != true) {
+                        WhiteKnight = new Piece();
+                        PieceCreateValues(WhiteKnight, (int)Pieces.WhiteKnight - 9, "Knight", "White");
+                    }
+                    else {
+                        //do stuff
+                    }
+                    break;
+
+                case (int)Pieces.WhiteKnight2 - 9:
+                    Piece WhiteKnight2;
+                    if (PieceExistsCheck("Knight2", "White") != true) {
+                        WhiteKnight2 = new Piece();
+                        PieceCreateValues(WhiteKnight2, (int)Pieces.WhiteKnight2 - 9, "Knight2", "White");
+                    }
+                    else {
+                        //do stuff
+                    }
+                    break;
+
+                case (int)Pieces.WhiteTower - 9:
+                    Piece WhiteTower;
+                    if (PieceExistsCheck("Tower", "White") != true) {
+                        WhiteTower = new Piece();
+                        PieceCreateValues(WhiteTower, (int)Pieces.WhiteTower - 9, "Tower", "White");
+                    }
+                    else {
+                        //do stuff
+                    }
+                    break;
+
+                case (int)Pieces.WhiteTower2 - 9:
+                    Piece WhiteTower2;
+                    if (PieceExistsCheck("Tower2", "White") != true) {
+                        WhiteTower2 = new Piece();
+                        PieceCreateValues(WhiteTower2, (int)Pieces.WhiteTower2 - 9, "Tower2", "White");
+                    }
+                    else {
+                        //do stuff
+                    }
+                    break;
+
+                case (int)Pieces.WhitePawn - 9:
+                    Piece WhitePawn;
+                    if (PieceExistsCheck("Pawn", "White") != true) {
+                        WhitePawn = new Piece();
+                        PieceCreateValues(WhitePawn, (int)Pieces.WhitePawn - 9, "Pawn", "White");
+                    }
+                    else {
+                        //do stuff
+                    }
                     break;
             }
         }
 
-        public void SetPiecePositions(){
-            ///Sorte brikker har - foran brikkens identitet, hvide har ingen
-            ///Rook/Tårn = 2, Springer/Knight = 3, Bishop/Løber = 4
-            ///Queen = 5, King = 6, Pawn = 1
-            ///Ingen brik = 0
-            
-            grid = new int[8, 8]
-            {
-                {-2,-3,-4,-5,-6,-4,-3,-2},
-                {-1,-1,-1,-1,-1,-1,-1,-1},
-                { 0, 0, 0, 0, 0, 0, 0, 0},
-                { 0, 0, 0, 0, 0, 0, 0, 0},
-                { 0, 0, 0, 0, 0, 0, 0, 0},
-                { 0, 0, 0, 0, 0, 0, 0, 0},
-                { 1, 1, 1, 1, 1, 1, 1, 1},
-                { 2, 3, 4, 5, 6, 4, 3, 2}
-            };
+        private void PieceCreateValues(Piece piece, int pieceId, string pieceName, string pieceColor) {
+            piece.Id = pieceId;
+            piece.Name = pieceName;
+            piece.Color = pieceColor;
+            pieces.Add(piece);
+        }
+        private bool PieceExistsCheck(string name, string color) {
+            return pieces.Exists(x => x.Name == name && x.Color == color);
+        } 
 
-            /*for (int x = 0; x < grid.GetLength(0); x++) {
-                for (int y = 0; y < grid.GetLength(1); y++) {
+        public void CreatePieces() {
+            SetPiecePositions();
+            PrintBoard();
+        }
 
+        private void SetPiecePositions(){
+            for (int y = 0; y < grid.GetLength(0); y++) {
+                for (int x = 0; x < grid.GetLength(1); x++) {
+                    if (grid[y, x] != 0) {
+                        
+                        PieceIdentification(x, y);
+                    }
                 }
+            }
+        }
+
+        private void PrintBoard() {
+            for (int y = 0; y < grid.GetLength(0); y++) {
+                for (int x = 0; x < grid.GetLength(1); x++) {
+                    Console.Write(string.Format(" {0} ", grid[y, x]));
+                }
+                Console.Write(Environment.NewLine + Environment.NewLine);
+            }
+
+            //FOR TESTING ONLY
+            /* 
+            int i = 1;
+            foreach(Piece p in pieces) {
+                Console.WriteLine(i + "   " + p.Name + "   " + p.Color + "   " + p.Id);
+                i++;
             }*/
+            
         }
 
         private bool BoardCheck(int request, int position, ref bool change){
