@@ -3,50 +3,45 @@ using System.Linq;
 
 namespace Skak {
     class Program {
-
+        InputReceiver inputCall = new InputReceiver();
         static void Main(string[] args) {
             Program Visual = new Program();
-            InputReceiver inputCall = new InputReceiver();
             Console.SetWindowSize(40, 5);
+            Console.Title = "Trash Chess";
+            Visual.GameMenu();
+            Console.SetWindowSize(35, 20);
+            Visual.RunGame();
+        }
+
+        void GameMenu() {
             Console.WriteLine("Welcome to a bad version of chess!");
             while (true) {
-                Console.WriteLine("Type START, HELP or EXIT");
+                Console.WriteLine("Type START, RULES or EXIT");
                 if (inputCall.Input().Equals("Start", StringComparison.OrdinalIgnoreCase)) {
                     break;
                 }
             }
-            Console.Title = "Trash Chess";
-            Console.SetWindowSize(35, 20);
-            while (true) {
-                Visual.ClearAndPrintBoard();
-                inputCall.Move_XY_Input("From");
-                Visual.ClearAndPrintBoard();
-                inputCall.Move_XY_Input("To");
-                Console.ReadLine();
-
-                // If game is done, break
-            }
-
-
         }
 
-        string[,] Board = new string[9, 9]{
-                {"   ", "a", "b", "c", "d", "e", "f", "g", "h" },
-                {"[1]", "R", "K", "B", "Q", "K", "R", "K", "B"},
-                {"[2]", "P", "P", "P", "P", "P", "P", "P", "P"},
-                {"[3]", " ", " ", " ", " ", " ", " ", " ", " "},
-                {"[4]", " ", " ", " ", " ", " ", " ", " ", " "},
-                {"[5]", " ", " ", " ", " ", " ", " ", " ", " "},
-                {"[6]", " ", " ", " ", " ", " ", " ", " ", " "},
-                {"[7]", "P", "P", "P", "P", "P", "P", "P", "P"},
-                {"[8]", "R", "K", "B", "Q", "K", "R", "K", "B"},
-        };
+        void RunGame() {
+            Moves Moves = new Moves();
 
-        void ClearAndPrintBoard() {
+            while (true) {
+                ClearAndPrintBoard();
+                inputCall.moveFromOrTo("From");
+                ClearAndPrintBoard();
+                inputCall.moveFromOrTo("To");
+                Moves.MovePieceLocation(inputCall.XYinput[0], inputCall.XYinput[1]);
+                Console.ReadLine();
+            }
+        }
+
+
+        public void ClearAndPrintBoard() {
             Console.Clear();
             for (int x = 0; x < 9; x++) {
                 for (int y = 0; y < 9; y++) {
-                    Console.Write(string.Format(" {0} ", Board[x, y]));
+                    Console.Write(string.Format(" {0} ", Visuals.Board[x, y]));
                 }
                 Console.Write(Environment.NewLine + Environment.NewLine);
             }
@@ -64,57 +59,74 @@ namespace Skak {
     }
 
 
-    class InputReceiver {
+    class InputReceiver { // Skal måske flyttes til Moves.cs?
         public string Input() {
             return Console.ReadLine();
         }
 
-        private char[] XYinput;
-
+        public string[] XYinput = new string[2]; // Indexes: 0 = fraXY, 1 = tilXY
+        public void moveFromOrTo(string FromOrTo) {
+            if (FromOrTo == "From") {
+                Console.Write("From pos XY: ");
+            }
+            else if (FromOrTo == "To") {
+                Console.Write($"{XYinput[0]} -> ");
+            }
+            Move_XY_Input(FromOrTo);
+        }
         public void Move_XY_Input(string FromOrTo) {
+            Program Visual = new Program();
             while (true) {
-                if (FromOrTo.Equals("From", StringComparison.OrdinalIgnoreCase)) {
-                    Console.Write("From pos XY: ");
-                }
-                else if (FromOrTo.Equals("To", StringComparison.OrdinalIgnoreCase)) {
-                    Console.Write($"{XYinput[0]}{XYinput[1]} -> ");
-
-                }
                 string positionInput = Input();
-                if (isPosInputValid(positionInput) == true) {
+
+                if (positionInput.Equals("Cancel", StringComparison.OrdinalIgnoreCase)) {
+                    Visual.ClearAndPrintBoard();
+                    moveFromOrTo("From");
+                }
+
+                else if (isPosInputValid(positionInput, FromOrTo) == true) {
                     break;
                 }
                 else {
-                    Console.WriteLine("Pos input isn't valid");
-                    // Try again
+                    Console.WriteLine("Pos input isn't valid...");
+                    Console.ReadKey();
+                    Visual.ClearAndPrintBoard();
+                    moveFromOrTo("From");
+                    break;
                 }
             }
         }
 
-        bool isPosInputValid(string positionInput) {
+        private bool isPosInputValid(string positionInput, string FromOrTo) {
             if (positionInput.Length == 2) { // Example: A1 (2 characters)
-                if (XYinputIsWithinBoard(positionInput) == true) {
+                if (XYinputIsWithinBoard(positionInput, FromOrTo) == true) {
                     return true;
                 }
             }
             return false;
         }
 
-        private char[] validPositionCharacters = { 'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h' };
-        private char[] validPositionNumbers = { '1', '2', '3', '4', '5', '6', '7', '8' };
 
-        bool XYinputIsWithinBoard(string positionInput) {
-            XYinput = Split_XY_InputToCharacters(positionInput);
-            if (validPositionCharacters.Contains(XYinput[0])) {
-                if (validPositionNumbers.Contains(XYinput[1])) {
-                    return true;
+        private bool XYinputIsWithinBoard(string positionInput, string FromOrTo) {
+            if (XYinputContainsValidChars(positionInput) == true) {
+                switch (FromOrTo) {
+                    case "From":
+                        XYinput[0] = positionInput;
+                        break;
+                    case "To":
+                        XYinput[1] = positionInput;
+                        break;
                 }
+                return true;
             }
             return false;
         }
 
-        char[] Split_XY_InputToCharacters(string positionInput) {
-            return positionInput.ToCharArray();
+        private char[] validPositionLetters = { 'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h' };
+        private char[] validPositionNums = { '1', '2', '3', '4', '5', '6', '7', '8' };
+
+        private bool XYinputContainsValidChars(string positionInput) {
+            return validPositionLetters.Contains(positionInput[0]) && validPositionNums.Contains(positionInput[1]);
         }
     }
 }
