@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace Skak {
+﻿namespace Skak {
     class Piece {
 
         private int id;             //den specifikke id på brikken
@@ -19,13 +15,13 @@ namespace Skak {
             get => name;
             set => name = value;
         }
-        
+
         public string Color {
             get => color;
             set => color = value;
         }
-    }    
+    }
 
-    
+
 
 }

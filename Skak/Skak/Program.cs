@@ -1,7 +1,7 @@
 ﻿using System;
 
 namespace Skak {
-    class Program : Moves {       
+    class Program : Moves {
 
         static void Main(string[] args) {
             //Print();

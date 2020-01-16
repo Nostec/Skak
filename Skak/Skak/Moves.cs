@@ -1,13 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
-namespace Skak
-{
-    class Moves : Exceptions
-    {
+namespace Skak {
+    class Moves {
         ///Den enum under (Pieces) bruges med en offset 
         ///Der skal -9 på hver gang for Null bliver 0
         public enum Pieces {
@@ -16,13 +11,13 @@ namespace Skak
             WhitePawn, WhiteTower, WhiteTower2, WhiteKnight, WhiteKnight2, WhiteBishop, WhiteBishop2, WhiteQueen, WhiteKing
         };
 
-        List<Piece> pieces = new List<Piece>();
+        public List<Piece> pieces = new List<Piece>();
 
         ///Sorte brikker har - foran brikkens identitet, hvide har ingen
         ///Rook/Tårn = 2&3, Springer/Knight = 4&5 Bishop/Løber = 6&7
         ///Queen = 8, King = 9, Pawn = 1
         ///Ingen brik = 0
-        int[,] grid = new int[8, 8]{
+        public int[,] grid = new int[8, 8]{
             {-2,-4,-6,-8,-9,-7,-5,-3},
             {-1,-1,-1,-1,-1,-1,-1,-1},
             { 0, 0, 0, 0, 0, 0, 0, 0},
@@ -33,16 +28,16 @@ namespace Skak
             { 2, 4, 6, 8, 9, 7, 5, 3}
         };
 
-        
+
         public void PieceRelocation(int x, int y, int reloX, int reloY) {
-            
+
             //MovePiecePosition(x, y, reloX, reloY);
         }
 
 
         private void PieceIdentification(int piece) {
             switch (piece) {
-                case (int)Pieces.Null-9:
+                case (int)Pieces.Null - 9:
                     Piece Null;
                     if (CheckPieceExists("Null", "Null") != true) {
                         Null = new Piece();
@@ -51,18 +46,19 @@ namespace Skak
                     //error message: Kan ikke rykke et tomt felt
                     break;
 
-                case (int)Pieces.BlackKing-9:
+                case (int)Pieces.BlackKing - 9:
                     Piece BlackKing;
                     if (CheckPieceExists("King", "Black") != true) {
                         BlackKing = new Piece();
                         PieceCreateValues(BlackKing, (int)Pieces.BlackKing - 9, "King", "Black");
                     }
                     else {
+
                         //do stuff
                     }
                     break;
 
-                case (int)Pieces.BlackQueen-9:
+                case (int)Pieces.BlackQueen - 9:
                     Piece BlackQueen;
                     if (CheckPieceExists("Queen", "Black") != true) {
                         BlackQueen = new Piece();
@@ -73,7 +69,7 @@ namespace Skak
                     }
                     break;
 
-                case (int)Pieces.BlackBishop-9:
+                case (int)Pieces.BlackBishop - 9:
                     Piece BlackBishop;
                     if (CheckPieceExists("Bishop", "Black") != true) {
                         BlackBishop = new Piece();
@@ -84,7 +80,7 @@ namespace Skak
                     }
                     break;
 
-                case (int)Pieces.BlackBishop2-9:
+                case (int)Pieces.BlackBishop2 - 9:
                     Piece BlackBishop2;
                     if (CheckPieceExists("Bishop2", "Black") != true) {
                         BlackBishop2 = new Piece();
@@ -95,7 +91,7 @@ namespace Skak
                     }
                     break;
 
-                case (int)Pieces.BlackKnight-9:
+                case (int)Pieces.BlackKnight - 9:
                     Piece BlackKnight;
                     if (CheckPieceExists("Knight", "Black") != true) {
                         BlackKnight = new Piece();
@@ -106,7 +102,7 @@ namespace Skak
                     }
                     break;
 
-                case (int)Pieces.BlackKnight2-9:
+                case (int)Pieces.BlackKnight2 - 9:
                     Piece BlackKnight2;
                     if (CheckPieceExists("Knight2", "Black") != true) {
                         BlackKnight2 = new Piece();
@@ -117,7 +113,7 @@ namespace Skak
                     }
                     break;
 
-                case (int)Pieces.BlackTower-9:
+                case (int)Pieces.BlackTower - 9:
                     Piece BlackTower;
                     if (CheckPieceExists("Tower", "Black") != true) {
                         BlackTower = new Piece();
@@ -128,7 +124,7 @@ namespace Skak
                     }
                     break;
 
-                case (int)Pieces.BlackTower2-9:
+                case (int)Pieces.BlackTower2 - 9:
                     Piece BlackTower2;
                     if (CheckPieceExists("Tower2", "Black") != true) {
                         BlackTower2 = new Piece();
@@ -139,7 +135,7 @@ namespace Skak
                     }
                     break;
 
-                case (int)Pieces.BlackPawn-9:
+                case (int)Pieces.BlackPawn - 9:
                     Piece BlackPawn;
                     if (CheckPieceExists("Pawn", "Black") != true) {
                         BlackPawn = new Piece();
@@ -259,20 +255,20 @@ namespace Skak
         }
         private bool CheckPieceExists(string name, string color) {
             return pieces.Exists(x => x.Name == name && x.Color == color);
-        } 
+        }
 
         public void CreatePieces() {
             SetPiecePositions();
             PrintBoard();
         }
-        
-        private void SetPiecePositions(){
+
+        private void SetPiecePositions() {
             for (int x = -9; x <= 9; x++) {
-                
-                    PieceIdentification(x);
-                
+
+                PieceIdentification(x);
+
             }
-            
+
         }
 
         private void PrintBoard() {
@@ -284,7 +280,7 @@ namespace Skak
                     else if (grid[y,x] >= 0) {
                         Console.Write(string.Format("  {0} ", grid[y, x]));
                     }*/
-                    Console.Write(string.Format(" {0} ", pieces[grid[y,x]+9].Name));
+                    Console.Write(string.Format(" {0} ", pieces[grid[y, x] + 9].Name));
                 }
                 Console.Write(Environment.NewLine + Environment.NewLine);
             }
@@ -295,8 +291,8 @@ namespace Skak
                 Console.WriteLine(i + "   " + p.Name + "   " + p.Color + "   " + p.Id);
                 i++;
             }*/
-            
-            
+
+
         }
     }
 }
