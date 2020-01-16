@@ -26,6 +26,9 @@
                                 return true;
                             }
                             else if (CompareColors(pieceId, grid[posY - 1, posX]) == true) {
+                                return false;
+                            }
+                            else if (CompareColors(pieceId, grid[posY - 1, posX]) == false) {
                                 return true;
                             }
                             else {//error message: move cannot be made
