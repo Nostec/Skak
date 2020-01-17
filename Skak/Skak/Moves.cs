@@ -17,7 +17,28 @@ namespace Skak
         };
 
         int[,] grid;
-        
+
+        public void MovePieceLocation(string FromXY, string ToXY) {
+            Program Visual = new Program();
+            int[] FromXYconverted = convertXYtoNums(FromXY);
+            int[] ToXYconverted = convertXYtoNums(ToXY);
+
+
+            // Hvis rykket er muligt gøres dette:
+            Visuals.Board[ToXYconverted[1], ToXYconverted[0]] = Visuals.Board[FromXYconverted[1], FromXYconverted[0]];
+            Visuals.Board[FromXYconverted[1], FromXYconverted[0]] = " ";
+            Visual.ClearAndPrintBoard();
+        }
+
+        string possibleLetterPositions = "abcdefgh";
+        int[] convertXYtoNums(string XY) {
+            int[] XYconverted = new int[2];
+            XYconverted[0] = possibleLetterPositions.IndexOf(XY[0]) + 1;
+            XYconverted[1] = Convert.ToInt32(XY[1].ToString());
+            return XYconverted;
+        }
+        // 13.01.20 er nået hertil, prøvede at lave konvertering fra char til num
+
         //Sender videre til de metoder der gøres brug af for at omlokaliserer en brik
         public void PieceRelocation(int x, int y, int reloX, int reloY) {
             
