@@ -52,24 +52,6 @@ namespace Skak {
             XYconverted[1] = Convert.ToInt32(XY[1].ToString());
             return XYconverted;
         }
-        // 13.01.20 er nået hertil, prøvede at lave konvertering fra char til num
-
-        //Sender videre til de metoder der gøres brug af for at omlokaliserer en brik
-        public void PieceRelocation(int x, int y, int reloX, int reloY) {
-
-            MovePiecePosition(x, y, reloX, reloY);
-        }
-
-        //
-        private void MovePiecePosition(int x, int y, int reloX, int reloY) {
-            //code to move the specific piece to another specific spot
-            //add exceptions for: if other piece is there(friendly & enemy), where it can move
-            int piece = grid[x, y];
-            int availableMovePosCheck;
-
-
-       
-
 
         private void PieceIdentification(int piece) {
 
