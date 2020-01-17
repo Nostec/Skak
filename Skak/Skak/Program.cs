@@ -45,6 +45,7 @@ namespace Skak {
                 }
                 Console.Write(Environment.NewLine + Environment.NewLine);
             }
+
         }
 
         static void ClearEverythingFromConsole(int line) {
