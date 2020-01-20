@@ -51,13 +51,13 @@
                                 if (IsDifferentColor(pieceId, grid[posY - i, posX]) == true) { 
                                     return true;
                                 }
-                                if(IsDifferentColor(pieceId, grid[posY + i, posX]) == true) {
+                                else if(IsDifferentColor(pieceId, grid[posY + i, posX]) == true) {
                                     return true;
                                 }
-                                if(IsDifferentColor(pieceId, grid[posY, posX - i]) == true) {
+                                else if(IsDifferentColor(pieceId, grid[posY, posX - i]) == true) {
                                     return true;
                                 }
-                                if(IsDifferentColor(pieceId, grid[posY, posX + 1])) {
+                                else if(IsDifferentColor(pieceId, grid[posY, posX + 1])) {
                                     return true;
                                 }
                                 else {
