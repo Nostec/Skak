@@ -15,6 +15,7 @@
         
 
         private bool MoveAllowedCheck() {
+            int maxMovesAllowed = 7;
             switch (pieces[pieceId].Color) {
                 case "White":
                     switch (pieces[pieceId].Name) {
@@ -41,6 +42,23 @@
 
                         case "Bishop":
                         case "Bishop2":
+                            for (int i = 0; i < maxMovesAllowed; i++) {
+                                if(CompareColors(pieceId, grid[posY - i, posX - i]) == true) {
+                                    return true;
+                                }
+                                else if(CompareColors(pieceId, grid[posY - i, posX + i]) == true) {
+                                    return true;
+                                }
+                                else if(CompareColors(pieceId, grid[posY + i, posX - i]) == true) {
+                                    return true;
+                                }
+                                else if(CompareColors(pieceId, grid[posY + i, posX + i]) == true) {
+                                    return true;
+                                }
+                                else {
+                                    return false;
+                                }
+                            }
                             break;
 
                         case "Tower":
