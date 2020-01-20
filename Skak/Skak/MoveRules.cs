@@ -19,16 +19,16 @@
                 case "White":
                     switch (pieces[pieceId].Name) {
                         case "Pawn":
-                            if (CompareColors(pieceId, grid[posY - 1, posX - 1]) == true) {
+                            if (IsDifferentColor(pieceId, grid[posY - 1, posX - 1]) == true) {
                                 return true;
                             }
-                            else if (CompareColors(pieceId, grid[posY - 1, posX + 1]) == true) {
+                            else if (IsDifferentColor(pieceId, grid[posY - 1, posX + 1]) == true) {
                                 return true;
                             }
-                            else if (CompareColors(pieceId, grid[posY - 1, posX]) == true) {
+                            else if (IsDifferentColor(pieceId, grid[posY - 1, posX]) == true) {
                                 return false;
                             }
-                            else if (CompareColors(pieceId, grid[posY - 1, posX]) == false) {
+                            else if (IsDifferentColor(pieceId, grid[posY - 1, posX]) == false) {
                                 return true;
                             }
                             else {//error message: move cannot be made
@@ -41,10 +41,29 @@
 
                         case "Bishop":
                         case "Bishop2":
+
                             break;
 
                         case "Tower":
                         case "Tower2":
+                            int maxMovesAllowed = 7;
+                            for (int i = 0; i < maxMovesAllowed; i++) { 
+                                if (IsDifferentColor(pieceId, grid[posY - i, posX]) == true) { 
+                                    return true;
+                                }
+                                if(IsDifferentColor(pieceId, grid[posY + i, posX]) == true) {
+                                    return true;
+                                }
+                                if(IsDifferentColor(pieceId, grid[posY, posX - i]) == true) {
+                                    return true;
+                                }
+                                if(IsDifferentColor(pieceId, grid[posY, posX + 1])) {
+                                    return true;
+                                }
+                                else {
+                                    return false;
+                                }
+                            }
                             break;
 
                         case "Queen":
@@ -59,13 +78,13 @@
                 case "Black":
                     switch (pieces[pieceId].Name) {
                         case "Pawn":
-                            if (CompareColors(pieceId, grid[posY + 1, posX - 1]) == true) {
+                            if (IsDifferentColor(pieceId, grid[posY + 1, posX - 1]) == true) {
                                 return true;
                             }
-                            else if (CompareColors(pieceId, grid[posY + 1, posX + 1]) == true) {
+                            else if (IsDifferentColor(pieceId, grid[posY + 1, posX + 1]) == true) {
                                 return true;
                             }
-                            else if (CompareColors(pieceId, grid[posY + 1, posX]) == true) {
+                            else if (IsDifferentColor(pieceId, grid[posY + 1, posX]) == true) {
                                 return true;
                             }
                             else {//error message: move cannot be made
@@ -100,7 +119,7 @@
             return false;
         }
 
-        private bool CompareColors(int pieceId, int otherPieceId) {
+        private bool IsDifferentColor(int pieceId, int otherPieceId) {
             if (pieces[otherPieceId].Color != pieces[pieceId].Color && pieces[otherPieceId].Color != "Null") {
                 return true;
             }
