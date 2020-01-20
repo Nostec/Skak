@@ -123,10 +123,14 @@
             if (pieces[otherPieceId].Color != pieces[pieceId].Color && pieces[otherPieceId].Color != "Null") {
                 return true;
             }
-            else {
+            else if(pieces[otherPieceId].Color == "Null") {
+                return true;
+            }
+            else { // Samme brik farve eller out of bounds
                 return false;
             }
         }
 
     }
 }
+
