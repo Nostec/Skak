@@ -37,6 +37,36 @@
 
                         case "Knight":
                         case "Knight2":
+                            if(CompareColors(pieceId, grid[posY + 2, posX - 1]) == true) {
+                                return true;
+                            }
+                            else if(CompareColors(pieceId, grid[posY + 2, posX + 1]) == true) {
+                                return true;
+                            }
+                            else if(CompareColors(pieceId, grid[posY + 1, posX - 1]) == true) {
+                                return true;
+                            }
+                            else if (CompareColors(pieceId, grid[posY + 1, posX + 1]) == true) {
+                                return true;
+                            }
+                            
+                            else if (CompareColors(pieceId, grid[posY - 2, posX - 1]) == true) {
+                                return true;
+                            }
+                            else if (CompareColors(pieceId, grid[posY - 2, posX + 1]) == true) {
+                                return true;
+                            }
+                            else if (CompareColors(pieceId, grid[posY - 1, posX - 1]) == true) {
+                                return true;
+                            }
+                            else if (CompareColors(pieceId, grid[posY - 1, posX + 1]) == true) {
+                                return true;
+                            }
+
+                            else {
+                                return false;
+                            }
+
                             break;
 
                         case "Bishop":
@@ -44,7 +74,8 @@
                             break;
 
                         case "Tower":
-                        case "Tower2":
+                        case "Tower2"
+                        :
                             break;
 
                         case "Queen":
