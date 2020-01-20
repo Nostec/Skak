@@ -25,14 +25,12 @@ namespace Skak {
 
         void RunGame() {
             Moves Moves = new Moves();
-
             while (true) {
                 ClearAndPrintBoard();
                 inputCall.moveFromOrTo("From");
                 ClearAndPrintBoard();
                 inputCall.moveFromOrTo("To");
                 Moves.MovePieceLocation(inputCall.XYinput[0], inputCall.XYinput[1]);
-                Console.ReadLine();
             }
         }
 

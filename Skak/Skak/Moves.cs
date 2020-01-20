@@ -16,7 +16,7 @@ namespace Skak {
             WhitePawn, WhiteTower, WhiteTower2, WhiteKnight, WhiteKnight2, WhiteBishop, WhiteBishop2, WhiteQueen, WhiteKing
         };
 
-        public List<Piece> pieces = new List<Piece>();
+        protected List<Piece> pieces = new List<Piece>();
 
         ///Sorte brikker har - foran brikkens identitet, hvide har ingen
         ///Rook/Tårn = 2&3, Springer/Knight = 4&5 Bishop/Løber = 6&7
@@ -31,18 +31,26 @@ namespace Skak {
             { 0, 0, 0, 0, 0, 0, 0, 0},
             { 1, 1, 1, 1, 1, 1, 1, 1},
             { 2, 4, 6, 8, 9, 7, 5, 3}
-        };        
+        };
 
         public void MovePieceLocation(string FromXY, string ToXY) {
             Program Visual = new Program();
+            MoveRules mr = new MoveRules();
+            mr.CreatePieces();
             int[] FromXYconverted = convertXYtoNums(FromXY);
             int[] ToXYconverted = convertXYtoNums(ToXY);
 
 
             // Hvis rykket er muligt gøres dette:
-            Visuals.Board[ToXYconverted[1], ToXYconverted[0]] = Visuals.Board[FromXYconverted[1], FromXYconverted[0]];
-            Visuals.Board[FromXYconverted[1], FromXYconverted[0]] = " ";
-            Visual.ClearAndPrintBoard();
+            mr.PieceId = grid[FromXYconverted[1]-1, FromXYconverted[0]-1];
+            if (mr.MoveAllowedCheck(FromXYconverted[0], FromXYconverted[1], ToXYconverted[0], ToXYconverted[1])) {
+                Visuals.Board[ToXYconverted[1], ToXYconverted[0]] = Visuals.Board[FromXYconverted[1], FromXYconverted[0]];
+                Visuals.Board[FromXYconverted[1], FromXYconverted[0]] = " ";
+                //Offset på backend grid grundet den er 8x8 istedet for 9x9
+                grid[ToXYconverted[1] - 1, ToXYconverted[0] - 1] = grid[FromXYconverted[1] - 1, FromXYconverted[0] - 1];
+                grid[FromXYconverted[1] - 1, FromXYconverted[0] - 1] = 0;
+                Visual.ClearAndPrintBoard();
+            }
         }
 
         string possibleLetterPositions = "abcdefgh";
@@ -291,7 +299,6 @@ namespace Skak {
 
         public void CreatePieces() {
             SetPiecePositions();
-            PrintBoard();
         }
           
         private void SetPiecePositions() {
