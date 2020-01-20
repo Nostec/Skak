@@ -1,6 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
 
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+
 namespace Skak {
     class Moves {
         ///Den enum under (Pieces) bruges med en offset 
@@ -11,7 +16,7 @@ namespace Skak {
             WhitePawn, WhiteTower, WhiteTower2, WhiteKnight, WhiteKnight2, WhiteBishop, WhiteBishop2, WhiteQueen, WhiteKing
         };
 
-        public List<Piece> pieces = new List<Piece>();
+        protected List<Piece> pieces = new List<Piece>();
 
         ///Sorte brikker har - foran brikkens identitet, hvide har ingen
         ///Rook/Tårn = 2&3, Springer/Knight = 4&5 Bishop/Løber = 6&7
@@ -28,14 +33,36 @@ namespace Skak {
             { 2, 4, 6, 8, 9, 7, 5, 3}
         };
 
+        public void MovePieceLocation(string FromXY, string ToXY) {
+            Program Visual = new Program();
+            MoveRules mr = new MoveRules();
+            mr.CreatePieces();
+            int[] FromXYconverted = convertXYtoNums(FromXY);
+            int[] ToXYconverted = convertXYtoNums(ToXY);
 
-        public void PieceRelocation(int x, int y, int reloX, int reloY) {
 
-            //MovePiecePosition(x, y, reloX, reloY);
+            // Hvis rykket er muligt gøres dette:
+            mr.PieceId = grid[FromXYconverted[1]-1, FromXYconverted[0]-1];
+            if (mr.MoveAllowedCheck(FromXYconverted[0], FromXYconverted[1], ToXYconverted[0], ToXYconverted[1])) {
+                Visuals.Board[ToXYconverted[1], ToXYconverted[0]] = Visuals.Board[FromXYconverted[1], FromXYconverted[0]];
+                Visuals.Board[FromXYconverted[1], FromXYconverted[0]] = " ";
+                //Offset på backend grid grundet den er 8x8 istedet for 9x9
+                grid[ToXYconverted[1] - 1, ToXYconverted[0] - 1] = grid[FromXYconverted[1] - 1, FromXYconverted[0] - 1];
+                grid[FromXYconverted[1] - 1, FromXYconverted[0] - 1] = 0;
+                Visual.ClearAndPrintBoard();
+            }
         }
 
+        string possibleLetterPositions = "abcdefgh";
+        int[] convertXYtoNums(string XY) {
+            int[] XYconverted = new int[2];
+            XYconverted[0] = possibleLetterPositions.IndexOf(XY[0]) + 1;
+            XYconverted[1] = Convert.ToInt32(XY[1].ToString());
+            return XYconverted;
+        }
 
         private void PieceIdentification(int piece) {
+
             switch (piece) {
                 case (int)Pieces.Null - 9:
                     Piece Null;
@@ -247,6 +274,18 @@ namespace Skak {
             }
         }
 
+
+        public void PerformMove() {
+            // SetCursorPosition
+            // Input indtil videre, skal ændres
+            int inputX = 0;
+            int inputY = 0;
+            int pieceOnInput;
+
+            pieceOnInput = grid[inputX, inputY];
+
+        }
+        
         private void PieceCreateValues(Piece piece, int pieceId, string pieceName, string pieceColor) {
             piece.Id = pieceId;
             piece.Name = pieceName;
@@ -257,16 +296,15 @@ namespace Skak {
             return pieces.Exists(x => x.Name == name && x.Color == color);
         }
 
+
         public void CreatePieces() {
             SetPiecePositions();
-            PrintBoard();
         }
-
+          
         private void SetPiecePositions() {
             for (int x = -9; x <= 9; x++) {
 
                 PieceIdentification(x);
-
             }
 
         }

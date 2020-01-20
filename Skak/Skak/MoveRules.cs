@@ -14,21 +14,21 @@
         }
         
 
-        private bool MoveAllowedCheck() {
-            switch (pieces[pieceId].Color) {
+        public bool MoveAllowedCheck(int posX, int posY, int toPosX, int toPosY) {
+            switch (pieces[pieceId+9].Color) {
                 case "White":
-                    switch (pieces[pieceId].Name) {
+                    switch (pieces[pieceId+9].Name) {
                         case "Pawn":
-                            if (IsDifferentColor(pieceId, grid[posY - 1, posX - 1]) == true) {
+                            if (IsChoiceOfMove(posX - 1, posY - 1, toPosX, toPosY) == true && IsDifferentColor(pieceId, grid[toPosY-1, toPosX-1]) == true) {
                                 return true;
                             }
-                            else if (IsDifferentColor(pieceId, grid[posY - 1, posX + 1]) == true) {
+                            else if (IsChoiceOfMove(posX + 1, posY - 1, toPosX, toPosY) == true && IsDifferentColor(pieceId, grid[toPosY-1, toPosX+1]) == true) {
                                 return true;
                             }
-                            else if (IsDifferentColor(pieceId, grid[posY - 1, posX]) == true) {
+                            else if (IsChoiceOfMove(posX, posY - 1, toPosX, toPosY) == true && IsDifferentColor(pieceId, grid[toPosY-1, toPosX]) == true) {
                                 return false;
                             }
-                            else if (IsDifferentColor(pieceId, grid[posY - 1, posX]) == false) {
+                            else if (IsChoiceOfMove(posX, posY - 1, toPosX, toPosY) == true && IsDifferentColor(pieceId, grid[toPosY-1, toPosX]) == false) {
                                 return true;
                             }
                             else {//error message: move cannot be made
@@ -119,8 +119,24 @@
             return false;
         }
 
+
+        private bool IsChoiceOfMove(int posX, int posY, int toPosX, int toPosY) {
+            if(posX == toPosX && posY == toPosY) {
+                return true;
+            }
+            else {
+                return false;
+            }
+        }
+
         private bool IsDifferentColor(int pieceId, int otherPieceId) {
-            if (pieces[otherPieceId].Color != pieces[pieceId].Color && pieces[otherPieceId].Color != "Null") {
+            //fjerner til id
+            pieceId = pieceId + 9;
+            otherPieceId = otherPieceId + 9;
+            if (pieces[otherPieceId].Color == "Null") {
+                return false;
+            }
+            else if (pieces[otherPieceId].Color != pieces[pieceId].Color || pieces[otherPieceId].Color != "Null") {
                 return true;
             }
             else if(pieces[otherPieceId].Color == "Null") {
