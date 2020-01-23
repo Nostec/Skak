@@ -49,7 +49,6 @@ namespace Skak {
                 //Offset på backend grid grundet den er 8x8 istedet for 9x9
                 grid[ToXYconverted[1] - 1, ToXYconverted[0] - 1] = grid[FromXYconverted[1] - 1, FromXYconverted[0] - 1];
                 grid[FromXYconverted[1] - 1, FromXYconverted[0] - 1] = 0;
-                PrintBoard();
             }
         }
 

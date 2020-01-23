@@ -2,18 +2,12 @@
 namespace Skak {
     class MoveRules : Moves {
         int pieceId;
-        int posX, posY;
-
+        int otherColorPiece;
+        bool otherPiece;
+        bool sameColorBlock;
         public int PieceId {
             set => this.pieceId = value;
         }
-        public int PosX {
-            set => this.posX = value;
-        }
-        public int PosY {
-            set => this.posY = value;
-        }
-        
 
         public bool MoveAllowedCheck(int posX, int posY, int toPosX, int toPosY) {
             switch (pieces[pieceId+9].Color) {
@@ -28,36 +22,17 @@ namespace Skak {
 
                         case "Bishop":
                         case "Bishop2":
-
-                            break;
+                            return checkIfMoveIsPossible("Bishop", posX, posY, toPosX, toPosY);
 
                         case "Tower":
                         case "Tower2":
-                            int maxMovesAllowed = 7;
-                            for (int i = 0; i < maxMovesAllowed; i++) { 
-                                if (IsDifferentColor(pieceId, grid[posY - i, posX]) == true) { 
-                                    return true;
-                                }
-                                else if(IsDifferentColor(pieceId, grid[posY + i, posX]) == true) {
-                                    return true;
-                                }
-                                else if(IsDifferentColor(pieceId, grid[posY, posX - i]) == true) {
-                                    return true;
-                                }
-                                else if(IsDifferentColor(pieceId, grid[posY, posX + 1])) {
-                                    return true;
-                                }
-                                else {
-                                    return false;
-                                }
-                            }
-                            break;
+                            return checkIfMoveIsPossible("Tower", posX, posY, toPosX, toPosY);
                             
                         case "Queen":
                             break;
 
                         case "King":
-                            return KingMoveIsPossible(posX, posY, toPosX, toPosY);
+                            return checkIfMoveIsPossible("King", posX, posY, toPosX, toPosY);
                     }
 
                     break;
@@ -84,7 +59,7 @@ namespace Skak {
 
                         case "Bishop":
                         case "Bishop2":
-                            break;
+                            return checkIfMoveIsPossible("Bishop", posX, posY, toPosX, toPosY);
 
                         case "Tower":
                         case "Tower2":
@@ -113,6 +88,10 @@ namespace Skak {
                         return PawnMoveIsPossible(posX, posY, toPosX, toPosY);
                     case "Knight":
                         return SpringerMoveIsPossible(posX, posY, toPosX, toPosY);
+                    case "Bishop":
+                        return BishopMoveIsPossible(posX, posY, toPosX, toPosY);
+                    case "Tower":
+                        return TowerMoveIsPossible(posX, posY, toPosX, toPosY);
                     case "King":
                         return KingMoveIsPossible(posX, posY, toPosX, toPosY);
                 }
@@ -173,6 +152,191 @@ namespace Skak {
             return false;
         }
 
+        bool BishopMoveIsPossible(int posX, int posY, int toPosX, int toPosY) {
+            otherColorPiece = 0;
+            otherPiece = false;
+            sameColorBlock = false;
+            if (IsChoiceOfMove(posX + (toPosX - posX), posY + (toPosY - posY), toPosX, toPosY)) {
+                for (int i = 0; i < toPosY - posY - 1; i++) {
+                    if (IsDifferentColor(pieceId, grid[toPosY - 1 + i, toPosX - 1 + i]) == true) {
+                        otherPiece = true;
+                        otherColorPiece++;
+                        if (IsSameColor(pieceId, grid[toPosY - 1 + i, toPosX - 1 + i]) == true) {
+                            sameColorBlock = true;
+                        }
+                    }
+                }
+                if(otherPiece == false) {
+                    return true;
+                }
+                if (sameColorBlock == false && otherColorPiece < 2 && IsDifferentColor(pieceId, grid[toPosY - 1, toPosX - 1]) == true) {
+                    return true;
+                }
+                return false;
+
+            }
+
+
+            else if (IsChoiceOfMove(posX - (posX - toPosX), posY - (posY - toPosY), toPosX, toPosY)) {
+                for (int i = 0; i < posY - toPosY - 1; i++) {
+                    if (IsDifferentColor(pieceId, grid[toPosY - i, toPosX - i]) == true && IsSameColor(pieceId, grid[toPosY + i, toPosX - i]) == true) {
+                        otherPiece = true;
+                        otherColorPiece++;
+                        if (IsSameColor(pieceId, grid[toPosY - i, toPosX - i]) == true) {
+                            sameColorBlock = true;
+                        }
+                    }
+                }
+                if (otherPiece == false) {
+                    return true;
+                }
+                else if (sameColorBlock == false && otherColorPiece < 2 && IsDifferentColor(pieceId, grid[toPosY - 1, toPosX - 1]) == true) {
+                    return true;
+                }
+                else {
+                    return false;
+                }
+            }
+
+            else if (IsChoiceOfMove(posX - (posX - toPosX), posY + (toPosY - posY), toPosX, toPosY)) {
+                for (int i = 0; i < posX - toPosX - 1; i++) {
+                    if (IsDifferentColor(pieceId, grid[toPosY - 1, toPosX - 1 + i]) == true && IsSameColor(pieceId, grid[toPosY - 1 + i, toPosX - 1 - i]) == true) {
+                        otherPiece = true;
+                        otherColorPiece++;
+                        if (IsSameColor(pieceId, grid[toPosY - 1, toPosX - 1 + i]) == true) {
+                            sameColorBlock = true;
+                        }
+                    }
+                }
+                if (otherPiece == false) {
+                    return true;
+                }
+                else if (sameColorBlock == false && otherColorPiece < 2 && IsDifferentColor(pieceId, grid[toPosY - 1, toPosX - 1]) == true) {
+                    return true;
+                }
+                else {
+                    return false;
+                }
+            }
+
+            else if (IsChoiceOfMove(posX + (toPosX - posX), posY - (posY - toPosY), toPosX, toPosY) == true) {
+                for (int i = 0; i < toPosX - posX - 1; i++) {
+                    if (IsDifferentColor(pieceId, grid[toPosY - 1 + i, toPosX - 1 - i]) == true && IsSameColor(pieceId, grid[toPosY - 1 + i, toPosX - 1 - i]) == true) {
+                        otherPiece = true;
+                        otherColorPiece++;
+                        if (IsSameColor(pieceId, grid[toPosY - 1 + i, toPosX - 1 - i]) == true) {
+                            sameColorBlock = true;
+                        }
+                    }
+                }
+                if (otherPiece == false) {
+                    return true;
+                }
+                else if (sameColorBlock == false && otherColorPiece < 2 && IsDifferentColor(pieceId, grid[toPosY - 1, toPosX - 1]) == true) {
+                    return true;
+                }
+                else {
+                    return false;
+                }
+            }
+            else {
+                return false;
+            }
+        }
+
+        bool TowerMoveIsPossible(int posX, int posY, int toPosX, int toPosY) {
+            otherColorPiece = 0;
+            otherPiece = false;
+            sameColorBlock = false;
+            if (IsChoiceOfMove(posX, posY + (toPosY - posY), toPosX, toPosY)) {
+                for (int i = 0; i < posY - toPosY - 1; i++) {
+                    if (CheckIfOtherPiece(pieceId, grid[toPosY - 1 + i, toPosX - 1]) == true) {
+                        otherPiece = true;
+                        otherColorPiece++;
+                        if (IsSameColor(pieceId, grid[toPosY - 1 + i, toPosX - 1]) == true) {
+                            sameColorBlock = true;
+                        }
+                    }
+                }
+                if (otherPiece == false) {
+                    return true;
+                }
+                else if (sameColorBlock == false && otherColorPiece < 2 && IsDifferentColor(pieceId, grid[toPosY - 1, toPosX - 1]) == true) {
+                    return true;
+                }
+                else {
+                    return false;
+                }
+            }
+
+
+            else if (IsChoiceOfMove(posX, posY - (posY - toPosY), toPosX, toPosY)) {
+                for (int i = 0; i < posY - toPosY - 1; i++) {
+                    if (CheckIfOtherPiece(pieceId, grid[toPosY - 1 - i, toPosX - 1]) == true) {
+                        otherPiece = true;
+                        otherColorPiece++;
+                        if (IsSameColor(pieceId, grid[toPosY - 1 - i, toPosX - 1]) == true) {
+                            sameColorBlock = true;
+                        }
+                    }
+                }
+                if (otherPiece == false) {
+                    return true;
+                }
+                else if (sameColorBlock == false && otherColorPiece < 2 && IsDifferentColor(pieceId, grid[toPosY - 1, toPosX - 1]) == true) {
+                    return true;
+                }
+                else {
+                    return false;
+                }
+            }
+
+            else if (IsChoiceOfMove(posX + (toPosX - posX), posY, toPosX, toPosY)) {
+                for (int i = 0; i < posX - toPosX; i++) {
+                    if (CheckIfOtherPiece(pieceId, grid[toPosY - 1, toPosX - 1 + i]) == true) {
+                        otherPiece = true;
+                        otherColorPiece++;
+                        if (IsSameColor(pieceId, grid[toPosY - 1, toPosX - 1 + i]) == true) {
+                            sameColorBlock = true;
+                        }
+                    }
+                }
+                if (otherPiece == false) {
+                    return true;
+                }
+                else if (sameColorBlock == false && otherColorPiece < 2 && IsDifferentColor(pieceId, grid[toPosY - 1, toPosX - 1]) == true) {
+                    return true;
+                }
+                else {
+                    return false;
+                }
+            }
+
+            else if (IsChoiceOfMove(posX - (posX - toPosY), posY, toPosX, toPosY) == true) {
+                for (int i = 0; i < posX - toPosX; i++) {
+                    if (CheckIfOtherPiece(pieceId, grid[toPosY - 1, toPosX - 1 - i]) == true) {
+                        otherPiece = true;
+                        otherColorPiece++;
+                        if (IsSameColor(pieceId, grid[toPosY - 1, toPosX - 1 - i]) == true) {
+                            sameColorBlock = true;
+                        }
+                    }
+                }
+                if (otherPiece == false) {
+                    return true;
+                }
+                else if (sameColorBlock == false && otherColorPiece < 2 && IsDifferentColor(pieceId, grid[toPosY - 1, toPosX - 1]) == true) {
+                    return true;
+                }
+                else {
+                    return false;
+                }
+            }
+            else {
+                return false;
+            }
+        }
+
         bool KingMoveIsPossible(int posX, int posY, int toPosX, int toPosY) {
             if (IsChoiceOfMove(posX - 1, posY - 1, toPosX, toPosY) == true) {
                 return true;
@@ -212,9 +376,40 @@ namespace Skak {
             }
         }
 
+        private bool IsSameColor(int pieceId, int otherPieceId) {
+            //fjerner til id
+            pieceId = pieceId + 9;
+            otherPieceId = otherPieceId + 9;
+
+            if (pieces[otherPieceId].Color == pieces[pieceId].Color) {
+                return true;
+            }
+            else {
+                return false;
+            }
+        }
+
+        private bool CheckIfOtherPiece(int pieceId, int otherPieceId) {
+            //fjerner til id
+            pieceId = pieceId + 9;
+            otherPieceId = otherPieceId + 9;
+
+            if (pieces[otherPieceId].Color == "Null") {
+                return false;
+            }
+            else if (pieces[otherPieceId].Color == pieces[pieceId].Color) {
+                return true;
+            }
+            else if (pieces[otherPieceId].Color != pieces[pieceId].Color && pieces[otherPieceId].Color != "Null") {
+                return true;
+            }
+            else { // Samme brik farve eller out of bounds
+                return false;
+            }
+        }
+
         private bool IsDifferentColor(int pieceId, int otherPieceId) {
             //fjerner til id
-            pieceId += 9;
             otherPieceId += 9;
             if(pieces[otherPieceId].Color == "Null") {
                 return true;
