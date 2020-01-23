@@ -156,12 +156,12 @@ namespace Skak {
             otherColorPiece = 0;
             otherPiece = false;
             sameColorBlock = false;
-            if (IsChoiceOfMove(posX + (toPosX - posX), posY + (toPosY - posY), toPosX, toPosY)) {
-                for (int i = 0; i < toPosY - posY - 1; i++) {
-                    if (IsDifferentColor(pieceId, grid[toPosY - 1 + i, toPosX - 1 + i]) == true) {
+            if (IsChoiceOfMove(posX - (toPosX - posX), posY - (toPosY - posY), toPosX, toPosY)) {
+                for (int i = 0; i < posY - toPosY - 1; i++) {
+                    if (IsSameColor(pieceId, grid[toPosY + i, toPosX + i]) == true) {
                         otherPiece = true;
                         otherColorPiece++;
-                        if (IsSameColor(pieceId, grid[toPosY - 1 + i, toPosX - 1 + i]) == true) {
+                        if (IsSameColor(pieceId, grid[toPosY + i, toPosX + i]) == true) {
                             sameColorBlock = true;
                         }
                     }
@@ -172,17 +172,16 @@ namespace Skak {
                 if (sameColorBlock == false && otherColorPiece < 2 && IsDifferentColor(pieceId, grid[toPosY - 1, toPosX - 1]) == true) {
                     return true;
                 }
-                return false;
-
+                else {
+                    return false;
+                }
             }
-
-
             else if (IsChoiceOfMove(posX - (posX - toPosX), posY - (posY - toPosY), toPosX, toPosY)) {
-                for (int i = 0; i < posY - toPosY - 1; i++) {
-                    if (IsDifferentColor(pieceId, grid[toPosY - i, toPosX - i]) == true && IsSameColor(pieceId, grid[toPosY + i, toPosX - i]) == true) {
+                for (int i = 1; i < posY - toPosY; i++) {
+                    if (IsSameColor(pieceId, grid[posY-1 - i, posX-1 - i]) == true) {
                         otherPiece = true;
                         otherColorPiece++;
-                        if (IsSameColor(pieceId, grid[toPosY - i, toPosX - i]) == true) {
+                        if (IsSameColor(pieceId, grid[toPosY, toPosX]) == true) {
                             sameColorBlock = true;
                         }
                     }
@@ -197,13 +196,12 @@ namespace Skak {
                     return false;
                 }
             }
-
-            else if (IsChoiceOfMove(posX - (posX - toPosX), posY + (toPosY - posY), toPosX, toPosY)) {
+            else if (IsChoiceOfMove(posX - (posX - toPosX), posY - (toPosY - posY), toPosX, toPosY)) {
                 for (int i = 0; i < posX - toPosX - 1; i++) {
-                    if (IsDifferentColor(pieceId, grid[toPosY - 1, toPosX - 1 + i]) == true && IsSameColor(pieceId, grid[toPosY - 1 + i, toPosX - 1 - i]) == true) {
+                    if (IsSameColor(pieceId, grid[toPosY - i, toPosX + i]) == true && IsSameColor(pieceId, grid[toPosY - 1 + i, toPosX - 1 - i]) == true) {
                         otherPiece = true;
                         otherColorPiece++;
-                        if (IsSameColor(pieceId, grid[toPosY - 1, toPosX - 1 + i]) == true) {
+                        if (IsSameColor(pieceId, grid[toPosY - i, toPosX + i]) == true) {
                             sameColorBlock = true;
                         }
                     }
@@ -218,13 +216,12 @@ namespace Skak {
                     return false;
                 }
             }
-
-            else if (IsChoiceOfMove(posX + (toPosX - posX), posY - (posY - toPosY), toPosX, toPosY) == true) {
+            else if (IsChoiceOfMove(posX - (toPosX - posX), posY - (posY - toPosY), toPosX, toPosY) == true) {
                 for (int i = 0; i < toPosX - posX - 1; i++) {
-                    if (IsDifferentColor(pieceId, grid[toPosY - 1 + i, toPosX - 1 - i]) == true && IsSameColor(pieceId, grid[toPosY - 1 + i, toPosX - 1 - i]) == true) {
+                    if (IsSameColor(pieceId, grid[toPosY + i, toPosX - i]) == true && IsSameColor(pieceId, grid[toPosY - 1 + i, toPosX - 1 - i]) == true) {
                         otherPiece = true;
                         otherColorPiece++;
-                        if (IsSameColor(pieceId, grid[toPosY - 1 + i, toPosX - 1 - i]) == true) {
+                        if (IsSameColor(pieceId, grid[toPosY + i, toPosX - i]) == true) {
                             sameColorBlock = true;
                         }
                     }
@@ -383,6 +380,9 @@ namespace Skak {
 
             if (pieces[otherPieceId].Color == pieces[pieceId].Color) {
                 return true;
+            }
+            else if (pieces[otherPieceId].Color != pieces[pieceId].Color && pieces[otherPieceId].Color != "Null") {
+                return false;
             }
             else {
                 return false;
