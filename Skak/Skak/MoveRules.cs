@@ -52,13 +52,12 @@ namespace Skak {
                                 }
                             }
                             break;
-
+                            
                         case "Queen":
                             break;
 
                         case "King":
-                            KingMoveIsPossible(posX, posY, toPosX, toPosY);
-                            break;
+                            return KingMoveIsPossible(posX, posY, toPosX, toPosY);
                     }
 
                     break;
@@ -112,11 +111,10 @@ namespace Skak {
                 switch (Piece) {
                     case "Pawn":
                         return PawnMoveIsPossible(posX, posY, toPosX, toPosY);
-                        break;
                     case "Knight":
                         return SpringerMoveIsPossible(posX, posY, toPosX, toPosY);
                     case "King":
-                        break;
+                        return KingMoveIsPossible(posX, posY, toPosX, toPosY);
                 }
             }
             return false;
@@ -137,6 +135,11 @@ namespace Skak {
                 return true;
             }
             else if (IsChoiceOfMove(posX, posY - 1, toPosX, toPosY) == true) {
+                int otherPieceId = grid[toPosY - 1, toPosX - 1];
+                otherPieceId += 9;
+                if(otherPieceId != 9) {
+                    return false;
+                }
                 return true;
             }
             return false;
@@ -171,31 +174,29 @@ namespace Skak {
         }
 
         bool KingMoveIsPossible(int posX, int posY, int toPosX, int toPosY) {
-            if(toPosIsntOnOwnPiece(toPosX, toPosY) == true) {
-                if (IsChoiceOfMove(posX - 1, posY - 1, toPosX, toPosY) == true) {
-                    return true;
-                }
-                else if (IsChoiceOfMove(posX, posY - 1, toPosX, toPosY) == true) {
-                    return true;
-                }
-                else if (IsChoiceOfMove(posX + 1, posY - 1, toPosX, toPosY) == true) {
-                    return true;
-                }
-                else if (IsChoiceOfMove(posX - 1, posY, toPosX, toPosY) == true) {
-                    return true;
-                }
-                else if (IsChoiceOfMove(posX + 1, posY, toPosX, toPosY) == true) {
-                    return true;
-                }
-                else if (IsChoiceOfMove(posX - 1, posY + 1, toPosX, toPosY) == true) {
-                    return true;
-                }
-                else if (IsChoiceOfMove(posX, posY + 1, toPosX, toPosY) == true) {
-                    return true;
-                }
-                else if (IsChoiceOfMove(posX + 1, posY + 1, toPosX, toPosY) == true) {
-                    return true;
-                }
+            if (IsChoiceOfMove(posX - 1, posY - 1, toPosX, toPosY) == true) {
+                return true;
+            }
+            else if (IsChoiceOfMove(posX, posY - 1, toPosX, toPosY) == true) {
+                return true;
+            }
+            else if (IsChoiceOfMove(posX + 1, posY - 1, toPosX, toPosY) == true) {
+                return true;
+            }
+            else if (IsChoiceOfMove(posX - 1, posY, toPosX, toPosY) == true) {
+                return true;
+            }
+            else if (IsChoiceOfMove(posX + 1, posY, toPosX, toPosY) == true) {
+                return true;
+            }
+            else if (IsChoiceOfMove(posX - 1, posY + 1, toPosX, toPosY) == true) {
+                return true;
+            }
+            else if (IsChoiceOfMove(posX, posY + 1, toPosX, toPosY) == true) {
+                return true;
+            }
+            else if (IsChoiceOfMove(posX + 1, posY + 1, toPosX, toPosY) == true) {
+                return true;
             }
             return false;
         }
@@ -213,15 +214,12 @@ namespace Skak {
 
         private bool IsDifferentColor(int pieceId, int otherPieceId) {
             //fjerner til id
-            pieceId = pieceId + 9;
-            otherPieceId = otherPieceId + 9;
+            pieceId += 9;
+            otherPieceId += 9;
             if(pieces[otherPieceId].Color == "Null") {
                 return true;
             }
-            else if (pieces[otherPieceId].Color != pieces[pieceId].Color || pieces[otherPieceId].Color != "Null") {
-                if(pieceId == 10) { // Pawn pieceId is 10 (Made so pawn can't eliminate an enemy piece in front of it)
-                    return false;
-                }
+            else if (pieces[otherPieceId].Color != pieces[pieceId].Color && pieces[otherPieceId].Color != "Null") {
                 return true;
             }
             else { // Samme brik farve eller out of bounds
