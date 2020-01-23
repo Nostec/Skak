@@ -22,7 +22,7 @@ namespace Skak {
         ///Rook/Tårn = 2&3, Springer/Knight = 4&5 Bishop/Løber = 6&7
         ///Queen = 8, King = 9, Pawn = 1
         ///Ingen brik = 0
-        public int[,] grid = new int[8, 8]{
+        protected int[,] grid = new int[8, 8]{
             {-2,-4,-6,-8,-9,-7,-5,-3},
             {-1,-1,-1,-1,-1,-1,-1,-1},
             { 0, 0, 0, 0, 0, 0, 0, 0},
@@ -312,13 +312,13 @@ namespace Skak {
         private void PrintBoard() {
             for (int y = 0; y < grid.GetLength(0); y++) {
                 for (int x = 0; x < grid.GetLength(1); x++) {
-                    /*if (grid[y, x] < 0) {
+                    if (grid[y, x] < 0) {
                         Console.Write(string.Format(" {0} ", grid[y, x]));
                     }
                     else if (grid[y,x] >= 0) {
                         Console.Write(string.Format("  {0} ", grid[y, x]));
-                    }*/
-                    Console.Write(string.Format(" {0} ", pieces[grid[y, x] + 9].Name));
+                    }
+                    //Console.Write(string.Format(" {0} ", pieces[grid[y, x] + 9].Name));
                 }
                 Console.Write(Environment.NewLine + Environment.NewLine);
             }
