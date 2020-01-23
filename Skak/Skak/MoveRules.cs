@@ -1,4 +1,5 @@
-﻿namespace Skak {
+﻿using System;
+namespace Skak {
     class MoveRules : Moves {
         int pieceId;
         int posX, posY;
@@ -19,25 +20,11 @@
                 case "White":
                     switch (pieces[pieceId+9].Name) {
                         case "Pawn":
-                            if (IsChoiceOfMove(posX - 1, posY - 1, toPosX, toPosY) == true && IsDifferentColor(pieceId, grid[toPosY-1, toPosX-1]) == true) {
-                                return true;
-                            }
-                            else if (IsChoiceOfMove(posX + 1, posY - 1, toPosX, toPosY) == true && IsDifferentColor(pieceId, grid[toPosY-1, toPosX+1]) == true) {
-                                return true;
-                            }
-                            else if (IsChoiceOfMove(posX, posY - 1, toPosX, toPosY) == true && IsDifferentColor(pieceId, grid[toPosY-1, toPosX]) == true) {
-                                return false;
-                            }
-                            else if (IsChoiceOfMove(posX, posY - 1, toPosX, toPosY) == true && IsDifferentColor(pieceId, grid[toPosY-1, toPosX]) == false) {
-                                return true;
-                            }
-                            else {//error message: move cannot be made
-                                return false;
-                            }
+                            return (checkIfMoveIsPossible("Pawn", posX, posY, toPosX, toPosY));
 
                         case "Knight":
                         case "Knight2":
-                            break;
+                            return checkIfMoveIsPossible("Knight", posX, posY, toPosX, toPosY);
 
                         case "Bishop":
                         case "Bishop2":
@@ -70,6 +57,7 @@
                             break;
 
                         case "King":
+                            KingMoveIsPossible(posX, posY, toPosX, toPosY);
                             break;
                     }
 
@@ -119,6 +107,100 @@
             return false;
         }
 
+        bool checkIfMoveIsPossible(string Piece, int posX, int posY, int toPosX, int toPosY) {
+            if (toPosIsntOnOwnPiece(toPosX, toPosY) == true) {
+                switch (Piece) {
+                    case "Pawn":
+                        return PawnMoveIsPossible(posX, posY, toPosX, toPosY);
+                        break;
+                    case "Knight":
+                        return SpringerMoveIsPossible(posX, posY, toPosX, toPosY);
+                    case "King":
+                        break;
+                }
+            }
+            return false;
+        }
+
+        bool toPosIsntOnOwnPiece(int toPosX, int toPosY) {
+            if(IsDifferentColor(pieceId, grid[toPosY - 1, toPosX - 1]) == true) {
+                return true;
+            }
+            return false;
+        }
+
+        bool PawnMoveIsPossible(int posX, int posY, int toPosX, int toPosY) {
+            if (IsChoiceOfMove(posX - 1, posY - 1, toPosX, toPosY) == true) {
+                return true;
+            }
+            else if (IsChoiceOfMove(posX + 1, posY - 1, toPosX, toPosY) == true) {
+                return true;
+            }
+            else if (IsChoiceOfMove(posX, posY - 1, toPosX, toPosY) == true) {
+                return true;
+            }
+            return false;
+        }
+
+        bool SpringerMoveIsPossible(int posX, int posY, int toPosX, int toPosY) {
+            if (IsChoiceOfMove(posX - 1, posY + 2, toPosX, toPosY) == true) {
+                return true;
+            }
+            else if (IsChoiceOfMove(posX + 1, posY + 2, toPosX, toPosY) == true) {
+                return true;
+            }
+            else if (IsChoiceOfMove(posX - 2, posY + 1, toPosX, toPosY) == true) {
+                return true;
+            }
+            else if (IsChoiceOfMove(posX + 2, posY + 1, toPosX, toPosY) == true) {
+                return true;
+            }
+            else if (IsChoiceOfMove(posX - 1, posY - 2, toPosX, toPosY) == true) {
+                return true;
+            }
+            else if (IsChoiceOfMove(posX + 1, posY - 2, toPosX, toPosY) == true) {
+                return true;
+            }
+            else if (IsChoiceOfMove(posX - 2, posY - 1, toPosX, toPosY) == true) {
+                return true;
+            }
+            else if (IsChoiceOfMove(posX + 2, posY - 1, toPosX, toPosY) == true) {
+                return true;
+            }
+            return false;
+        }
+
+        bool KingMoveIsPossible(int posX, int posY, int toPosX, int toPosY) {
+            if(toPosIsntOnOwnPiece(toPosX, toPosY) == true) {
+                if (IsChoiceOfMove(posX - 1, posY - 1, toPosX, toPosY) == true) {
+                    return true;
+                }
+                else if (IsChoiceOfMove(posX, posY - 1, toPosX, toPosY) == true) {
+                    return true;
+                }
+                else if (IsChoiceOfMove(posX + 1, posY - 1, toPosX, toPosY) == true) {
+                    return true;
+                }
+                else if (IsChoiceOfMove(posX - 1, posY, toPosX, toPosY) == true) {
+                    return true;
+                }
+                else if (IsChoiceOfMove(posX + 1, posY, toPosX, toPosY) == true) {
+                    return true;
+                }
+                else if (IsChoiceOfMove(posX - 1, posY + 1, toPosX, toPosY) == true) {
+                    return true;
+                }
+                else if (IsChoiceOfMove(posX, posY + 1, toPosX, toPosY) == true) {
+                    return true;
+                }
+                else if (IsChoiceOfMove(posX + 1, posY + 1, toPosX, toPosY) == true) {
+                    return true;
+                }
+            }
+            return false;
+        }
+
+
 
         private bool IsChoiceOfMove(int posX, int posY, int toPosX, int toPosY) {
             if(posX == toPosX && posY == toPosY) {
@@ -133,13 +215,13 @@
             //fjerner til id
             pieceId = pieceId + 9;
             otherPieceId = otherPieceId + 9;
-            if (pieces[otherPieceId].Color == "Null") {
-                return false;
-            }
-            else if (pieces[otherPieceId].Color != pieces[pieceId].Color || pieces[otherPieceId].Color != "Null") {
+            if(pieces[otherPieceId].Color == "Null") {
                 return true;
             }
-            else if(pieces[otherPieceId].Color == "Null") {
+            else if (pieces[otherPieceId].Color != pieces[pieceId].Color || pieces[otherPieceId].Color != "Null") {
+                if(pieceId == 10) { // Pawn pieceId is 10 (Made so pawn can't eliminate an enemy piece in front of it)
+                    return false;
+                }
                 return true;
             }
             else { // Samme brik farve eller out of bounds
