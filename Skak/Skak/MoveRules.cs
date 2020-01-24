@@ -32,6 +32,7 @@ namespace Skak {
                             break;
 
                         case "King":
+                            pieceId -= 9;
                             return checkIfMoveIsPossible("King", posX, posY, toPosX, toPosY);
                     }
 
@@ -44,7 +45,7 @@ namespace Skak {
 
                         case "Knight":
                         case "Knight2":
-                            break;
+                            return checkIfMoveIsPossible("Knight", posX, posY, toPosX, toPosY);
 
                         case "Bishop":
                         case "Bishop2":
@@ -52,13 +53,14 @@ namespace Skak {
 
                         case "Tower":
                         case "Tower2":
-                            break;
+                            return checkIfMoveIsPossible("Tower", posX, posY, toPosX, toPosY);
 
                         case "Queen":
                             break;
 
                         case "King":
-                            break;
+                            pieceId += 9;
+                            return checkIfMoveIsPossible("King", posX, posY, toPosX, toPosY);
                     }
                     break;
 
@@ -95,6 +97,21 @@ namespace Skak {
                 return true;
             }
             return false;
+        }
+
+        private bool IsDifferentColor(int pieceId, int otherPieceId) {
+            //fjerner til id
+            pieceId += 9;
+            otherPieceId += 9;
+            if (pieces[otherPieceId].Color == "Null") {
+                return true;
+            }
+            else if (pieces[otherPieceId].Color != pieces[pieceId].Color && pieces[otherPieceId].Color != "Null") {
+                return true;
+            }
+            else { // Samme brik farve eller out of bounds
+                return false;
+            }
         }
 
         bool WhitePawnMoveIsPossible(int posX, int posY, int toPosX, int toPosY) {
@@ -407,21 +424,6 @@ namespace Skak {
                 return false;
             }
             else if (pieces[otherPieceId].Color == pieces[pieceId].Color) {
-                return true;
-            }
-            else if (pieces[otherPieceId].Color != pieces[pieceId].Color && pieces[otherPieceId].Color != "Null") {
-                return true;
-            }
-            else { // Samme brik farve eller out of bounds
-                return false;
-            }
-        }
-
-        private bool IsDifferentColor(int pieceId, int otherPieceId) {
-            //fjerner til id
-            pieceId += 9;
-            otherPieceId += 9;
-            if(pieces[otherPieceId].Color == "Null") {
                 return true;
             }
             else if (pieces[otherPieceId].Color != pieces[pieceId].Color && pieces[otherPieceId].Color != "Null") {
