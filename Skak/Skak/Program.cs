@@ -4,6 +4,7 @@ using System.Linq;
 namespace Skak {
     class Program {
         InputReceiver inputCall = new InputReceiver();
+        public static bool Player1Turn = true;
         static void Main(string[] args) {
             Program Visual = new Program();
             Console.SetWindowSize(40, 5);
@@ -63,18 +64,26 @@ namespace Skak {
             return Console.ReadLine();
         }
 
+        static Program Visual = new Program();
+
         public string[] XYinput = new string[2]; // Indexes: 0 = fraXY, 1 = tilXY
         public void moveFromOrTo(string FromOrTo) {
+            if (Program.Player1Turn == true) {
+                Console.WriteLine("Player 1 turn");
+            }
+            else {
+                Console.WriteLine("Player 2 turn");
+            }
             if (FromOrTo == "From") {
                 Console.Write("From pos XY: ");
             }
             else if (FromOrTo == "To") {
                 Console.Write($"{XYinput[0]} -> ");
             }
+            
             Move_XY_Input(FromOrTo);
         }
         public void Move_XY_Input(string FromOrTo) {
-            Program Visual = new Program();
             while (true) {
                 string positionInput = Input();
 
@@ -95,6 +104,7 @@ namespace Skak {
                 }
             }
         }
+
 
         private bool isPosInputValid(string positionInput, string FromOrTo) {
             if (positionInput.Length == 2) { // Example: A1 (2 characters)
