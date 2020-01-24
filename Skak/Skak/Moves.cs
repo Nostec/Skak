@@ -10,7 +10,7 @@ namespace Skak {
     class Moves {
         ///Den enum under (Pieces) bruges med en offset 
         ///Der skal -9 på hver gang for Null bliver 0
-        public enum Pieces {
+        protected enum Pieces {
             BlackKing, BlackQueen, BlackBishop2, BlackBishop, BlackKnight2, BlackKnight, BlackTower2, BlackTower, BlackPawn,
             Null, //skal bruges som 0
             WhitePawn, WhiteTower, WhiteTower2, WhiteKnight, WhiteKnight2, WhiteBishop, WhiteBishop2, WhiteQueen, WhiteKing
@@ -22,7 +22,7 @@ namespace Skak {
         ///Rook/Tårn = 2&3, Springer/Knight = 4&5 Bishop/Løber = 6&7
         ///Queen = 8, King = 9, Pawn = 1
         ///Ingen brik = 0
-        public int[,] grid = new int[8, 8]{
+        protected static int[,] grid = new int[8, 8]{
             {-2,-4,-6,-8,-9,-7,-5,-3},
             {-1,-1,-1,-1,-1,-1,-1,-1},
             { 0, 0, 0, 0, 0, 0, 0, 0},
@@ -32,6 +32,8 @@ namespace Skak {
             { 1, 1, 1, 1, 1, 1, 1, 1},
             { 2, 4, 6, 8, 9, 7, 5, 3}
         };
+
+        
 
         public void MovePieceLocation(string FromXY, string ToXY) {
             Program Visual = new Program();
