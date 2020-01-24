@@ -14,7 +14,7 @@ namespace Skak {
                 case "White":
                     switch (pieces[pieceId+9].Name) {
                         case "Pawn":
-                            return (checkIfMoveIsPossible("Pawn", posX, posY, toPosX, toPosY));
+                            return (checkIfMoveIsPossible("WhitePawn", posX, posY, toPosX, toPosY));
 
                         case "Knight":
                         case "Knight2":
@@ -38,20 +38,9 @@ namespace Skak {
                     break;
 
                 case "Black":
-                    switch (pieces[pieceId].Name) {
+                    switch (pieces[pieceId+9].Name) {
                         case "Pawn":
-                            if (IsDifferentColor(pieceId, grid[posY + 1, posX - 1]) == true) {
-                                return true;
-                            }
-                            else if (IsDifferentColor(pieceId, grid[posY + 1, posX + 1]) == true) {
-                                return true;
-                            }
-                            else if (IsDifferentColor(pieceId, grid[posY + 1, posX]) == true) {
-                                return true;
-                            }
-                            else {//error message: move cannot be made
-                                return false;
-                            }
+                            return checkIfMoveIsPossible("BlackPawn", posX, posY, toPosX, toPosY);
 
                         case "Knight":
                         case "Knight2":
@@ -84,8 +73,10 @@ namespace Skak {
         bool checkIfMoveIsPossible(string Piece, int posX, int posY, int toPosX, int toPosY) {
             if (toPosIsntOnOwnPiece(toPosX, toPosY) == true) {
                 switch (Piece) {
-                    case "Pawn":
-                        return PawnMoveIsPossible(posX, posY, toPosX, toPosY);
+                    case "WhitePawn":
+                        return WhitePawnMoveIsPossible(posX, posY, toPosX, toPosY);
+                    case "BlackPawn":
+                        return BlackPawnMoveIsPossible(posX, posY, toPosX, toPosY);
                     case "Knight":
                         return SpringerMoveIsPossible(posX, posY, toPosX, toPosY);
                     case "Bishop":
@@ -106,7 +97,7 @@ namespace Skak {
             return false;
         }
 
-        bool PawnMoveIsPossible(int posX, int posY, int toPosX, int toPosY) {
+        bool WhitePawnMoveIsPossible(int posX, int posY, int toPosX, int toPosY) {
             if (IsChoiceOfMove(posX - 1, posY - 1, toPosX, toPosY) == true) {
                 return true;
             }
@@ -117,6 +108,24 @@ namespace Skak {
                 int otherPieceId = grid[toPosY - 1, toPosX - 1];
                 otherPieceId += 9;
                 if(otherPieceId != 9) {
+                    return false;
+                }
+                return true;
+            }
+            return false;
+        }
+
+        bool BlackPawnMoveIsPossible(int posX, int posY, int toPosX, int toPosY) {
+            if (IsChoiceOfMove(posX + 1, posY + 1, toPosX, toPosY) == true) {
+                return true;
+            }
+            else if (IsChoiceOfMove(posX - 1, posY + 1, toPosX, toPosY) == true) {
+                return true;
+            }
+            else if (IsChoiceOfMove(posX, posY + 1, toPosX, toPosY) == true) {
+                int otherPieceId = grid[toPosY -1, toPosX];
+                otherPieceId += 9;
+                if (otherPieceId != 9) {
                     return false;
                 }
                 return true;
@@ -410,6 +419,7 @@ namespace Skak {
 
         private bool IsDifferentColor(int pieceId, int otherPieceId) {
             //fjerner til id
+            pieceId += 9;
             otherPieceId += 9;
             if(pieces[otherPieceId].Color == "Null") {
                 return true;
