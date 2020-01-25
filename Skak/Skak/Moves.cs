@@ -43,11 +43,11 @@ namespace Skak {
             int[] FromXYconverted = convertXYtoNums(FromXY);
           
             if(pieceIsPlayers(FromXYconverted, Program.Player1Turn) == true) {
-                Program.Player1Turn = !Program.Player1Turn;
                 int[] ToXYconverted = convertXYtoNums(ToXY);
                 // Hvis rykket er muligt gøres dette:
                 mr.PieceId = grid[FromXYconverted[1] - 1, FromXYconverted[0] - 1];
                 if (mr.MoveAllowedCheck(FromXYconverted[0], FromXYconverted[1], ToXYconverted[0], ToXYconverted[1])) {
+                    Program.Player1Turn = !Program.Player1Turn;
                     Visuals.Board[ToXYconverted[1], ToXYconverted[0]] = Visuals.Board[FromXYconverted[1], FromXYconverted[0]];
                     Visuals.Board[FromXYconverted[1], FromXYconverted[0]] = " ";
                     //Offset på backend grid grundet den er 8x8 istedet for 9x9
@@ -58,7 +58,7 @@ namespace Skak {
             }
             else {
                 Console.WriteLine("You can't move that piece...");
-                Console.ReadLine();
+                Console.ReadKey();
                 Visual.ClearAndPrintBoard();
                 IR.moveFromOrTo("From");
             }    
