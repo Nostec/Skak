@@ -4,6 +4,7 @@ using System.Linq;
 namespace Skak {
     class Program {
         InputReceiver inputCall = new InputReceiver();
+        public static bool Player1Turn = true;
         static void Main(string[] args) {
             Program Visual = new Program();
             Console.SetWindowSize(40, 5);
@@ -35,7 +36,7 @@ namespace Skak {
         }
 
 
-        public static void ClearAndPrintBoard() {
+        public void ClearAndPrintBoard() {
             Console.Clear();
             for (int x = 0; x < 9; x++) {
                 for (int y = 0; y < 9; y++) {
@@ -63,14 +64,23 @@ namespace Skak {
             return Console.ReadLine();
         }
 
+        static Program Visual = new Program();
+
         public string[] XYinput = new string[2]; // Indexes: 0 = fraXY, 1 = tilXY
         public void moveFromOrTo(string FromOrTo) {
+            if (Program.Player1Turn == true) {
+                Console.WriteLine("Player 1 turn");
+            }
+            else {
+                Console.WriteLine("Player 2 turn");
+            }
             if (FromOrTo == "From") {
                 Console.Write("From pos XY: ");
             }
             else if (FromOrTo == "To") {
                 Console.Write($"{XYinput[0]} -> ");
             }
+            
             Move_XY_Input(FromOrTo);
         }
 
@@ -79,7 +89,7 @@ namespace Skak {
                 string positionInput = Input();
 
                 if (positionInput.Equals("Cancel", StringComparison.OrdinalIgnoreCase)) {
-                    Program.ClearAndPrintBoard();
+                    Visual.ClearAndPrintBoard();
                     moveFromOrTo("From");
                     break;
                 }
@@ -90,12 +100,13 @@ namespace Skak {
                 else {
                     Console.WriteLine("Pos input isn't valid...");
                     Console.ReadKey();
-                    Program.ClearAndPrintBoard();
+                    Visual.ClearAndPrintBoard();
                     moveFromOrTo("From");
                     break;
                 }
             }
         }
+
 
         private bool isPosInputValid(string positionInput, string FromOrTo) {
             if (positionInput.Length == 2) { // Example: A1 (2 characters)
