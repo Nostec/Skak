@@ -306,7 +306,7 @@ namespace Skak {
             else if (posX - toPosX > 0) {
                 return TowerMoveIsPossible(posX, posY, toPosX, toPosY);
             }
-            else if (posX - toPosX > 0) {
+            else if (posX - toPosX < 0) {
                 return TowerMoveIsPossible(posX, posY, toPosX, toPosY);
             }
             else {
