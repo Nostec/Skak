@@ -60,7 +60,6 @@ namespace Skak {
                 Console.WriteLine("You can't move that piece...");
                 Console.ReadKey();
                 Visual.ClearAndPrintBoard();
-                IR.moveFromOrTo("From");
             }    
         }
 

@@ -143,7 +143,7 @@ namespace Skak {
                 return true;
             }
             else if (IsChoiceOfMove(posX, posY + 1, toPosX, toPosY) == true) {
-                int otherPieceId = grid[toPosY -1, toPosX];
+                int otherPieceId = grid[toPosY + 1, toPosX + 1];
                 otherPieceId += 9;
                 if (otherPieceId != 9) {
                     return false;
