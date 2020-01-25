@@ -297,16 +297,16 @@ namespace Skak {
             else if (posX - toPosX > 0 && posY - toPosY > 0) {
                 return BishopMoveIsPossible(posX, posY, toPosX, toPosY);
             }
-            else if (IsChoiceOfMove(posX, posY + (toPosY - posY), toPosX, toPosY)) {
+            else if (posY - toPosY > 0) {
                 return TowerMoveIsPossible(posX, posY, toPosX, toPosY);
             }
-            else if (IsChoiceOfMove(posX, posY - (toPosY - posY), toPosX, toPosY)) {
+            else if (posY - toPosY < 0) {
                 return TowerMoveIsPossible(posX, posY, toPosX, toPosY);
             }
-            else if (IsChoiceOfMove(posX + (toPosX - posX), posY, toPosX, toPosY)) {
+            else if (posX - toPosX > 0) {
                 return TowerMoveIsPossible(posX, posY, toPosX, toPosY);
             }
-            else if (IsChoiceOfMove(posX - (toPosX - posX), posY, toPosX, toPosY)) {
+            else if (posX - toPosX > 0) {
                 return TowerMoveIsPossible(posX, posY, toPosX, toPosY);
             }
             else {
