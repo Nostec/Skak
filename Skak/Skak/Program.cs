@@ -36,7 +36,7 @@ namespace Skak {
         }
 
 
-        public void ClearAndPrintBoard() {
+        public static void ClearAndPrintBoard() {
             Console.Clear();
             for (int x = 0; x < 9; x++) {
                 for (int y = 0; y < 9; y++) {
@@ -83,13 +83,15 @@ namespace Skak {
             
             Move_XY_Input(FromOrTo);
         }
+
         public void Move_XY_Input(string FromOrTo) {
             while (true) {
                 string positionInput = Input();
 
                 if (positionInput.Equals("Cancel", StringComparison.OrdinalIgnoreCase)) {
-                    Visual.ClearAndPrintBoard();
+                    Program.ClearAndPrintBoard();
                     moveFromOrTo("From");
+                    break;
                 }
 
                 else if (isPosInputValid(positionInput, FromOrTo) == true) {
@@ -98,7 +100,7 @@ namespace Skak {
                 else {
                     Console.WriteLine("Pos input isn't valid...");
                     Console.ReadKey();
-                    Visual.ClearAndPrintBoard();
+                    Program.ClearAndPrintBoard();
                     moveFromOrTo("From");
                     break;
                 }
