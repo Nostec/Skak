@@ -77,8 +77,14 @@ namespace Skak {
             if (toPosIsntOnOwnPiece(toPosX, toPosY) == true) {
                 switch (Piece) {
                     case "WhitePawn":
+                        if(posY == 7 && posY - toPosY == 2) { // If pawn is on start pos (first move), let it move 2 ahead
+                            return WhitePawnMoveIsPossible(posX, posY - 1, toPosX, toPosY);
+                        }
                         return WhitePawnMoveIsPossible(posX, posY, toPosX, toPosY);
                     case "BlackPawn":
+                        if(posY == 2 && toPosY - posY == 2) {
+                            return BlackPawnMoveIsPossible(posX, posY + 1, toPosX, toPosY);
+                        }
                         return BlackPawnMoveIsPossible(posX, posY, toPosX, toPosY);
                     case "Knight":
                         return SpringerMoveIsPossible(posX, posY, toPosX, toPosY);
@@ -117,6 +123,48 @@ namespace Skak {
             }
         }
 
+        void PawnPromotion(string Color, int posX, int posY) {
+            while(true) {
+                Console.Write("Promote pawn to: "); string promotionInput = Console.ReadLine();
+                if (promotionInput.Equals("Queen", StringComparison.OrdinalIgnoreCase)) {
+                    if (Color == "White") {
+                        Visuals.Board[posY, posX] = "Q";
+                        Moves.grid[posY - 1, posX - 1] = 8;
+                    }
+                    else {
+                        Visuals.Board[posY, posX] = "q";
+                        Moves.grid[posX - 1, posX - 1] = -8;
+                    }
+                    break;
+                }
+                else if (promotionInput.Equals("Tower", StringComparison.OrdinalIgnoreCase)) {
+                    if (Color == "White") {
+                        Visuals.Board[posY, posX] = "T";
+                        Moves.grid[posY - 1, posX - 1] = 2;
+                    }
+                    else {
+                        Visuals.Board[posY, posX] = "t";
+                        Moves.grid[posX - 1, posX - 1] = -2;
+                    }
+                    break;
+                }
+                else if (promotionInput.Equals("Bishop", StringComparison.OrdinalIgnoreCase)) {
+                    if (Color == "White") {
+                        Visuals.Board[posY, posX] = "B";
+                        Moves.grid[posY, posX] = 6;
+                    }
+                    else {
+                        Visuals.Board[posY, posX] = "b";
+                        Moves.grid[posX, posX] = -6;
+                    }
+                    break;
+                }
+                else {
+                    
+                }
+            }
+        }
+
         bool WhitePawnMoveIsPossible(int posX, int posY, int toPosX, int toPosY) {
             if (IsChoiceOfMove(posX - 1, posY - 1, toPosX, toPosY) == true) {
                 return true;
@@ -129,6 +177,9 @@ namespace Skak {
                 otherPieceId += 9;
                 if(otherPieceId != 9) {
                     return false;
+                }
+                if(toPosY == 1) { // If pawn location is on the furthest Y on the board
+                    PawnPromotion("White", posX, posY);
                 }
                 return true;
             }
@@ -143,10 +194,13 @@ namespace Skak {
                 return true;
             }
             else if (IsChoiceOfMove(posX, posY + 1, toPosX, toPosY) == true) {
-                int otherPieceId = grid[toPosY + 1, toPosX + 1];
+                int otherPieceId = grid[toPosY - 1, toPosX - 1];
                 otherPieceId += 9;
                 if (otherPieceId != 9) {
                     return false;
+                }
+                if (toPosY == 8) { // If pawn location is on the furthest Y on the board
+                    PawnPromotion("Black", posX, posY);
                 }
                 return true;
             }
