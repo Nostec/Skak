@@ -77,8 +77,14 @@ namespace Skak {
             if (toPosIsntOnOwnPiece(toPosX, toPosY) == true) {
                 switch (Piece) {
                     case "WhitePawn":
+                        if(posY == 7 && posY - toPosY == 2) { // If pawn is on start pos (first move), let it move 2 ahead
+                            return WhitePawnMoveIsPossible(posX, posY - 1, toPosX, toPosY);
+                        }
                         return WhitePawnMoveIsPossible(posX, posY, toPosX, toPosY);
                     case "BlackPawn":
+                        if(posY == 2 && toPosY - posY == 2) {
+                            return BlackPawnMoveIsPossible(posX, posY + 1, toPosX, toPosY);
+                        }
                         return BlackPawnMoveIsPossible(posX, posY, toPosX, toPosY);
                     case "Knight":
                         return SpringerMoveIsPossible(posX, posY, toPosX, toPosY);
@@ -110,6 +116,7 @@ namespace Skak {
                 return true;
             }
             else if (pieces[otherPieceId].Color != pieces[pieceId].Color && pieces[otherPieceId].Color != "Null") {
+                checkIfGameEnd(pieceId, otherPieceId);
                 return true;
             }
             else { // Samme brik farve eller out of bounds
@@ -117,11 +124,27 @@ namespace Skak {
             }
         }
 
+        void checkIfGameEnd(int pieceId, int otherPieceId) {
+            if (pieces[otherPieceId].Name == "King") {
+                if (Program.Player1Turn == true) {
+                    Console.WriteLine("Player1 Won!");
+                }
+                else {
+                    Console.WriteLine("Player2 Won!");
+                }
+                Console.WriteLine("Press any key to end the game...");
+                Console.ReadKey();
+                Program.gameEnd = true;
+            }
+        }
+
         bool WhitePawnMoveIsPossible(int posX, int posY, int toPosX, int toPosY) {
             if (IsChoiceOfMove(posX - 1, posY - 1, toPosX, toPosY) == true) {
+                PawnPromotionCheck(toPosY, posX, posY);
                 return true;
             }
             else if (IsChoiceOfMove(posX + 1, posY - 1, toPosX, toPosY) == true) {
+                PawnPromotionCheck(toPosY, posX, posY);
                 return true;
             }
             else if (IsChoiceOfMove(posX, posY - 1, toPosX, toPosY) == true) {
@@ -130,6 +153,7 @@ namespace Skak {
                 if(otherPieceId != 9) {
                     return false;
                 }
+                PawnPromotionCheck(toPosY, posX, posY);
                 return true;
             }
             return false;
@@ -137,13 +161,16 @@ namespace Skak {
 
         bool BlackPawnMoveIsPossible(int posX, int posY, int toPosX, int toPosY) {
             if (IsChoiceOfMove(posX + 1, posY + 1, toPosX, toPosY) == true) {
+                PawnPromotionCheck(toPosY, posX, posY);
                 return true;
             }
             else if (IsChoiceOfMove(posX - 1, posY + 1, toPosX, toPosY) == true) {
+                PawnPromotionCheck(toPosY, posX, posY);
                 return true;
             }
             else if (IsChoiceOfMove(posX, posY + 1, toPosX, toPosY) == true) {
-                int otherPieceId = grid[toPosY + 1, toPosX + 1];
+                PawnPromotionCheck(toPosY, posX, posY);
+                int otherPieceId = grid[toPosY - 1, toPosX - 1];
                 otherPieceId += 9;
                 if (otherPieceId != 9) {
                     return false;
@@ -151,6 +178,57 @@ namespace Skak {
                 return true;
             }
             return false;
+        }
+
+        void PawnPromotionCheck(int toPosY, int posX, int posY) {
+            if(toPosY == 1) { // If pawn location is on the furthest Y on the board
+                PawnPromotion("White", posX, posY);
+            }
+            else if (toPosY == 8) { 
+                PawnPromotion("Black", posX, posY);
+            }
+        }
+
+        void PawnPromotion(string Color, int posX, int posY) {
+            while (true) {
+                Console.Write("Promote pawn to: "); string promotionInput = Console.ReadLine();
+                if (promotionInput.Equals("Queen", StringComparison.OrdinalIgnoreCase)) {
+                    if (Color == "White") {
+                        Visuals.Board[posY, posX] = "Q";
+                        Moves.grid[posY - 1, posX - 1] = 8;
+                    }
+                    else {
+                        Visuals.Board[posY, posX] = "q";
+                        Moves.grid[posY - 1, posX - 1] = -8;
+                    }
+                    break;
+                }
+                else if (promotionInput.Equals("Tower", StringComparison.OrdinalIgnoreCase)) {
+                    if (Color == "White") {
+                        Visuals.Board[posY, posX] = "R";
+                        Moves.grid[posY - 1, posX - 1] = 2;
+                    }
+                    else {
+                        Visuals.Board[posY, posX] = "r";
+                        Moves.grid[posY - 1, posX - 1] = -2;
+                    }
+                    break;
+                }
+                else if (promotionInput.Equals("Bishop", StringComparison.OrdinalIgnoreCase)) {
+                    if (Color == "White") {
+                        Visuals.Board[posY, posX] = "B";
+                        Moves.grid[posY - 1, posX - 1] = 6;
+                    }
+                    else {
+                        Visuals.Board[posY, posX] = "b";
+                        Moves.grid[posY - 1, posX - 1] = -6;
+                    }
+                    break;
+                }
+                else {
+
+                }
+            }
         }
 
         bool SpringerMoveIsPossible(int posX, int posY, int toPosX, int toPosY) {
