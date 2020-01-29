@@ -28,7 +28,7 @@ namespace Skak {
             { 0, 0, 0, 0, 0, 0, 0, 0},
             { 0, 0, 0, 0, 0, 0, 0, 0},
             { 0, 0, 0, 0, 0, 0, 0, 0},
-            { 0, 0, 0, 0, 0, 0, 0, 0},
+            { -1, 0, 0, 0, 0, 0, 0, 0},
             { 1, 1, 1, 1, 1, 1, 1, 1},
             { 2, 4, 6, 8, 9, 7, 5, 3}
         };
@@ -66,7 +66,7 @@ namespace Skak {
         string possibleLetterPositions = "abcdefgh";
         int[] convertXYtoNums(string XY) {
             int[] XYconverted = new int[2];
-            XYconverted[0] = possibleLetterPositions.IndexOf(XY[0]) + 1;
+            XYconverted[0] = possibleLetterPositions.IndexOf(char.ToLower(XY[0])) + 1;
             XYconverted[1] = Convert.ToInt32(XY[1].ToString());
             return XYconverted;
         }

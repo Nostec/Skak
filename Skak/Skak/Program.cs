@@ -5,6 +5,7 @@ namespace Skak {
     class Program {
         InputReceiver inputCall = new InputReceiver();
         public static bool Player1Turn = true;
+        public static bool gameEnd = false;
         static void Main(string[] args) {
             Program Visual = new Program();
             Console.SetWindowSize(40, 5);
@@ -25,13 +26,14 @@ namespace Skak {
         }
 
         void RunGame() {
-            Moves Moves = new Moves();
             while (true) {
                 ClearAndPrintBoard();
                 inputCall.moveFromOrTo("From");
                 ClearAndPrintBoard();
                 inputCall.moveFromOrTo("To");
-                Moves.MovePieceLocation(inputCall.XYinput[0], inputCall.XYinput[1]);
+                if(gameEnd == true) {
+                    break;
+                }
             }
         }
 
@@ -90,18 +92,23 @@ namespace Skak {
 
                 if (positionInput.Equals("Cancel", StringComparison.OrdinalIgnoreCase)) {
                     Visual.ClearAndPrintBoard();
-                    moveFromOrTo("From");
                     break;
                 }
 
                 else if (isPosInputValid(positionInput, FromOrTo) == true) {
+                    if(FromOrTo == "To") {
+                        Moves Moves = new Moves();
+                        Moves.MovePieceLocation(XYinput[0], XYinput[1]);
+                    }
                     break;
                 }
                 else {
                     Console.WriteLine("Pos input isn't valid...");
                     Console.ReadKey();
                     Visual.ClearAndPrintBoard();
-                    moveFromOrTo("From");
+                    if(FromOrTo == "From") {
+                        moveFromOrTo("From");
+                    }
                     break;
                 }
             }
@@ -137,7 +144,7 @@ namespace Skak {
         private char[] validPositionNums = { '1', '2', '3', '4', '5', '6', '7', '8' };
 
         private bool XYinputContainsValidChars(string positionInput) {
-            return validPositionLetters.Contains(positionInput[0]) && validPositionNums.Contains(positionInput[1]);
+            return validPositionLetters.Contains(char.ToLower(positionInput[0])) && validPositionNums.Contains(positionInput[1]);
         }
     }
 }
