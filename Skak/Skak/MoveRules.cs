@@ -11,56 +11,50 @@ namespace Skak {
         }
 
         public bool MoveAllowedCheck(int posX, int posY, int toPosX, int toPosY) {
-            switch (pieces[pieceId+9].Color) {
+            switch (pieces[pieceId + offset].Color) {
                 case "White":
-                    switch (pieces[pieceId+9].Name) {
+                    switch (pieces[pieceId + offset].Name) {
                         case "Pawn":
                             return (checkIfMoveIsPossible("WhitePawn", posX, posY, toPosX, toPosY));
 
                         case "Knight":
-                        case "Knight2":
                             return checkIfMoveIsPossible("Knight", posX, posY, toPosX, toPosY);
 
                         case "Bishop":
-                        case "Bishop2":
                             return checkIfMoveIsPossible("Bishop", posX, posY, toPosX, toPosY);
 
                         case "Tower":
-                        case "Tower2":
                             return checkIfMoveIsPossible("Tower", posX, posY, toPosX, toPosY);
-                            
+
                         case "Queen":
                             return checkIfMoveIsPossible("Queen", posX, posY, toPosX, toPosY);
 
                         case "King":
-                            pieceId -= 9;
+                            pieceId -= offset;
                             return checkIfMoveIsPossible("King", posX, posY, toPosX, toPosY);
                     }
 
                     break;
 
                 case "Black":
-                    switch (pieces[pieceId+9].Name) {
+                    switch (pieces[pieceId + offset].Name) {
                         case "Pawn":
                             return checkIfMoveIsPossible("BlackPawn", posX, posY, toPosX, toPosY);
 
                         case "Knight":
-                        case "Knight2":
                             return checkIfMoveIsPossible("Knight", posX, posY, toPosX, toPosY);
 
                         case "Bishop":
-                        case "Bishop2":
                             return checkIfMoveIsPossible("Bishop", posX, posY, toPosX, toPosY);
 
                         case "Tower":
-                        case "Tower2":
                             return checkIfMoveIsPossible("Tower", posX, posY, toPosX, toPosY);
 
                         case "Queen":
                             return checkIfMoveIsPossible("Queen", posX, posY, toPosX, toPosY);
 
                         case "King":
-                            pieceId += 9;
+                            pieceId += offset;
                             return checkIfMoveIsPossible("King", posX, posY, toPosX, toPosY);
                     }
                     break;
@@ -77,12 +71,12 @@ namespace Skak {
             if (toPosIsntOnOwnPiece(toPosX, toPosY) == true) {
                 switch (Piece) {
                     case "WhitePawn":
-                        if(posY == 7 && posY - toPosY == 2) { // If pawn is on start pos (first move), let it move 2 ahead
+                        if (posY == 7 && posY - toPosY == 2) { // If pawn is on start pos (first move), let it move 2 ahead
                             return WhitePawnMoveIsPossible(posX, posY - 1, toPosX, toPosY);
                         }
                         return WhitePawnMoveIsPossible(posX, posY, toPosX, toPosY);
                     case "BlackPawn":
-                        if(posY == 2 && toPosY - posY == 2) {
+                        if (posY == 2 && toPosY - posY == 2) {
                             return BlackPawnMoveIsPossible(posX, posY + 1, toPosX, toPosY);
                         }
                         return BlackPawnMoveIsPossible(posX, posY, toPosX, toPosY);
@@ -102,26 +96,10 @@ namespace Skak {
         }
 
         bool toPosIsntOnOwnPiece(int toPosX, int toPosY) {
-            if(IsDifferentColor(pieceId, grid[toPosY - 1, toPosX - 1]) == true) {
+            if (IsDifferentColor(pieceId, grid[toPosY - 1, toPosX - 1]) == true) {
                 return true;
             }
             return false;
-        }
-
-        private bool IsDifferentColor(int pieceId, int otherPieceId) {
-            //fjerner til id
-            pieceId += 9;
-            otherPieceId += 9;
-            if (pieces[otherPieceId].Color == "Null") {
-                return true;
-            }
-            else if (pieces[otherPieceId].Color != pieces[pieceId].Color && pieces[otherPieceId].Color != "Null") {
-                checkIfGameEnd(pieceId, otherPieceId);
-                return true;
-            }
-            else { // Samme brik farve eller out of bounds
-                return false;
-            }
         }
 
         void checkIfGameEnd(int pieceId, int otherPieceId) {
@@ -150,7 +128,7 @@ namespace Skak {
             else if (IsChoiceOfMove(posX, posY - 1, toPosX, toPosY) == true) {
                 int otherPieceId = Moves.grid[toPosY - 1, toPosX - 1];
                 otherPieceId += 9;
-                if(otherPieceId != 9) {
+                if (otherPieceId != 9) {
                     return false;
                 }
                 PawnPromotionCheck(toPosY, posX, posY);
@@ -178,57 +156,6 @@ namespace Skak {
                 return true;
             }
             return false;
-        }
-
-        void PawnPromotionCheck(int toPosY, int posX, int posY) {
-            if(toPosY == 1) { // If pawn location is on the furthest Y on the board
-                PawnPromotion("White", posX, posY);
-            }
-            else if (toPosY == 8) { 
-                PawnPromotion("Black", posX, posY);
-            }
-        }
-
-        void PawnPromotion(string Color, int posX, int posY) {
-            while (true) {
-                Console.Write("Promote pawn to: "); string promotionInput = Console.ReadLine();
-                if (promotionInput.Equals("Queen", StringComparison.OrdinalIgnoreCase)) {
-                    if (Color == "White") {
-                        Visuals.Board[posY, posX] = "Q";
-                        Moves.grid[posY - 1, posX - 1] = 8;
-                    }
-                    else {
-                        Visuals.Board[posY, posX] = "q";
-                        Moves.grid[posY - 1, posX - 1] = -8;
-                    }
-                    break;
-                }
-                else if (promotionInput.Equals("Tower", StringComparison.OrdinalIgnoreCase)) {
-                    if (Color == "White") {
-                        Visuals.Board[posY, posX] = "R";
-                        Moves.grid[posY - 1, posX - 1] = 2;
-                    }
-                    else {
-                        Visuals.Board[posY, posX] = "r";
-                        Moves.grid[posY - 1, posX - 1] = -2;
-                    }
-                    break;
-                }
-                else if (promotionInput.Equals("Bishop", StringComparison.OrdinalIgnoreCase)) {
-                    if (Color == "White") {
-                        Visuals.Board[posY, posX] = "B";
-                        Moves.grid[posY - 1, posX - 1] = 6;
-                    }
-                    else {
-                        Visuals.Board[posY, posX] = "b";
-                        Moves.grid[posY - 1, posX - 1] = -6;
-                    }
-                    break;
-                }
-                else {
-
-                }
-            }
         }
 
         bool SpringerMoveIsPossible(int posX, int posY, int toPosX, int toPosY) {
@@ -266,13 +193,7 @@ namespace Skak {
             onFinalPos = false;
             if (posX - toPosX < 0 && posY - toPosY < 0) {
                 for (int i = 1; i <= toPosY - posY; i++) {
-                    if (CheckIfOtherPiece(pieceId, Moves.grid[posY - 1 + i, posX - 1 + i]) == true) {
-                        otherPiece = true;
-                        otherColorPiece++;
-                        if (IsSameColor(pieceId, Moves.grid[posY - 1 + i, posX - 1 + i]) == true) {
-                            sameColorBlock = true;
-                        }
-                    }
+                    IsPieceBlockingPath(posY - 1 + i, posX - 1 + i);
                     if (IsChoiceOfMove(posX + i, posY + i, toPosX, toPosY) == true) {
                         onFinalPos = true;
                     }
@@ -281,28 +202,16 @@ namespace Skak {
             }
             else if (posX - toPosX > 0 && posY - toPosY > 0) {
                 for (int i = 1; i <= posY - toPosY; i++) {
-                    if (CheckIfOtherPiece(pieceId, Moves.grid[posY - 1 - i, posX - 1 - i]) == true) {
-                        otherPiece = true;
-                        otherColorPiece++;
-                        if (IsSameColor(pieceId, Moves.grid[posY - 1 - i, posX - 1 - i]) == true) {
-                            sameColorBlock = true;
-                        }
-                    }
+                    IsPieceBlockingPath(posY - 1 - i, posX - 1 - i);
                     if (IsChoiceOfMove(posX - i, posY - i, toPosX, toPosY) == true) {
                         onFinalPos = true;
                     }
                 }
                 return BishopAndTowerMoveCheck(toPosX, toPosY);
             }
-            else if ( posX - toPosX < 0 && posY - toPosY > 0) {
+            else if (posX - toPosX < 0 && posY - toPosY > 0) {
                 for (int i = 1; i <= toPosX - posX; i++) {
-                    if (CheckIfOtherPiece(pieceId, Moves.grid[posY - 1 - i, posX - 1 + i]) == true) {
-                        otherPiece = true;
-                        otherColorPiece++;
-                        if (IsSameColor(pieceId, Moves.grid[posY - 1 - i, posX - 1 + i]) == true) {
-                            sameColorBlock = true;
-                        }
-                    }
+                    IsPieceBlockingPath(posY - 1 - i, posX - 1 + i);
                     if (IsChoiceOfMove(posX + i, posY - i, toPosX, toPosY) == true) {
                         onFinalPos = true;
                     }
@@ -311,13 +220,7 @@ namespace Skak {
             }
             else if (posX - toPosX > 0 && posY - toPosY < 0) {
                 for (int i = 1; i <= posX - toPosX; i++) {
-                    if (CheckIfOtherPiece(pieceId, Moves.grid[posY - 1 + i, posX - 1 - i]) == true) {
-                        otherPiece = true;
-                        otherColorPiece++;
-                        if (IsSameColor(pieceId, Moves.grid[posY - 1 + i, posX - 1 - i]) == true) {
-                            sameColorBlock = true;
-                        }
-                    }
+                    IsPieceBlockingPath(posY - 1 + i, posX - 1 - i);
                     if (IsChoiceOfMove(posX - i, posY + i, toPosX, toPosY) == true) {
                         onFinalPos = true;
                     }
@@ -335,13 +238,7 @@ namespace Skak {
             sameColorBlock = false;
             if (posY - toPosY > 0) {
                 for (int i = 1; i <= posY - toPosY; i++) {
-                    if (CheckIfOtherPiece(pieceId, Moves.grid[posY - 1 - i, posX - 1]) == true) {
-                        otherPiece = true;
-                        otherColorPiece++;
-                        if (IsSameColor(pieceId, Moves.grid[posY - 1 - i, posX - 1]) == true) {
-                            sameColorBlock = true;
-                        }
-                    }
+                    IsPieceBlockingPath(posY - 1 - i, posX - 1);
                     if (IsChoiceOfMove(posX, posY - i, toPosX, toPosY) == true) {
                         onFinalPos = true;
                     }
@@ -350,13 +247,7 @@ namespace Skak {
             }
             else if (posY - toPosY < 0) {
                 for (int i = 1; i <= toPosY - posY; i++) {
-                    if (CheckIfOtherPiece(pieceId, Moves.grid[posY - 1 + i, posX - 1]) == true) {
-                        otherPiece = true;
-                        otherColorPiece++;
-                        if (IsSameColor(pieceId, Moves.grid[posY - 1 + i, posX - 1]) == true) {
-                            sameColorBlock = true;
-                        }
-                    }
+                    IsPieceBlockingPath(posY - 1 + i, posX - 1);
                     if (IsChoiceOfMove(posX, posY + i, toPosX, toPosY) == true) {
                         onFinalPos = true;
                     }
@@ -366,13 +257,7 @@ namespace Skak {
             }
             else if (posX - toPosX > 0) {
                 for (int i = 1; i <= posX - toPosX; i++) {
-                    if (CheckIfOtherPiece(pieceId, Moves.grid[posY - 1, posX - 1 - i]) == true) {
-                        otherPiece = true;
-                        otherColorPiece++;
-                        if (IsSameColor(pieceId, Moves.grid[posY - 1, posX - 1 - i]) == true) {
-                            sameColorBlock = true;
-                        }
-                    }
+                    IsPieceBlockingPath(posY - 1, posX - 1 - i);
                     if (IsChoiceOfMove(posX - i, posY, toPosX, toPosY) == true) {
                         onFinalPos = true;
                     }
@@ -381,13 +266,7 @@ namespace Skak {
             }
             else if (posX - toPosX < 0) {
                 for (int i = 1; i <= toPosX - posX; i++) {
-                    if (CheckIfOtherPiece(pieceId, Moves.grid[posY - 1, posX - 1 + i]) == true) {
-                        otherPiece = true;
-                        otherColorPiece++;
-                        if (IsSameColor(pieceId, Moves.grid[posY - 1, posX - 1 + i]) == true) {
-                            sameColorBlock = true;
-                        }
-                    }
+                    IsPieceBlockingPath(posY - 1, posX - 1 + i);
                     if (IsChoiceOfMove(posX + i, posY, toPosX, toPosY) == true) {
                         onFinalPos = true;
                     }
@@ -471,9 +350,69 @@ namespace Skak {
         }
 
 
+        void PawnPromotionCheck(int toPosY, int posX, int posY) {
+            if (toPosY == 1) { // If pawn location is on the furthest Y on the board
+                PawnPromotion("White", posX, posY);
+            }
+            else if (toPosY == 8) {
+                PawnPromotion("Black", posX, posY);
+            }
+        }
 
+        void PawnPromotion(string Color, int posX, int posY) {
+            while (true) {
+                Console.Write("Promote pawn to: "); string promotionInput = Console.ReadLine();
+                if (promotionInput.Equals("Queen", StringComparison.OrdinalIgnoreCase)) {
+                    if (Color == "White") {
+                        Visuals.Board[posY, posX] = "Q";
+                        Moves.grid[posY - 1, posX - 1] = 8;
+                    }
+                    else {
+                        Visuals.Board[posY, posX] = "q";
+                        Moves.grid[posY - 1, posX - 1] = -8;
+                    }
+                    break;
+                }
+                else if (promotionInput.Equals("Tower", StringComparison.OrdinalIgnoreCase)) {
+                    if (Color == "White") {
+                        Visuals.Board[posY, posX] = "R";
+                        Moves.grid[posY - 1, posX - 1] = 2;
+                    }
+                    else {
+                        Visuals.Board[posY, posX] = "r";
+                        Moves.grid[posY - 1, posX - 1] = -2;
+                    }
+                    break;
+                }
+                else if (promotionInput.Equals("Bishop", StringComparison.OrdinalIgnoreCase)) {
+                    if (Color == "White") {
+                        Visuals.Board[posY, posX] = "B";
+                        Moves.grid[posY - 1, posX - 1] = 6;
+                    }
+                    else {
+                        Visuals.Board[posY, posX] = "b";
+                        Moves.grid[posY - 1, posX - 1] = -6;
+                    }
+                    break;
+                }
+                else {
+
+                }
+            }
+        }
+
+
+        void IsPieceBlockingPath(int posY, int posX) {
+            if (CheckIfOtherPiece(pieceId, Moves.grid[posY, posX]) == true) {
+                otherPiece = true;
+                otherColorPiece++;
+                if (IsSameColor(pieceId, Moves.grid[posY, posX]) == true) {
+                    sameColorBlock = true;
+                }
+            }
+        }
         private bool IsChoiceOfMove(int posX, int posY, int toPosX, int toPosY) {
-            if(posX == toPosX && posY == toPosY) {
+            if (posX == toPosX && posY == toPosY) {
                 return true;
             }
             else {
@@ -481,10 +420,26 @@ namespace Skak {
             }
         }
 
+        private bool IsDifferentColor(int pieceId, int otherPieceId) {
+            //fjerner til id
+            pieceId += offset;
+            otherPieceId += offset;
+            if (pieces[otherPieceId].Color == "Null") {
+                return true;
+            }
+            else if (pieces[otherPieceId].Color != pieces[pieceId].Color && pieces[otherPieceId].Color != "Null") {
+                checkIfGameEnd(pieceId, otherPieceId);
+                return true;
+            }
+            else { // Samme brik farve eller out of bounds
+                return false;
+            }
+        }
+
         private bool IsSameColor(int pieceId, int otherPieceId) {
             //fjerner til id
-            pieceId = pieceId + 9;
-            otherPieceId = otherPieceId + 9;
+            pieceId += offset;
+            otherPieceId += offset;
 
             if (pieces[otherPieceId].Color == pieces[pieceId].Color) {
                 return true;
@@ -499,8 +454,8 @@ namespace Skak {
 
         private bool CheckIfOtherPiece(int pieceId, int otherPieceId) {
             //fjerner til id
-            pieceId = pieceId + 9;
-            otherPieceId = otherPieceId + 9;
+            pieceId += offset;
+            otherPieceId += offset;
 
             if (pieces[otherPieceId].Color == "Null") {
                 return false;
