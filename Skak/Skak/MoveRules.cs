@@ -18,22 +18,19 @@ namespace Skak {
                             return (checkIfMoveIsPossible("WhitePawn", posX, posY, toPosX, toPosY));
 
                         case "Knight":
-                        case "Knight2":
                             return checkIfMoveIsPossible("Knight", posX, posY, toPosX, toPosY);
 
                         case "Bishop":
-                        case "Bishop2":
                             return checkIfMoveIsPossible("Bishop", posX, posY, toPosX, toPosY);
 
                         case "Tower":
-                        case "Tower2":
                             return checkIfMoveIsPossible("Tower", posX, posY, toPosX, toPosY);
 
                         case "Queen":
                             return checkIfMoveIsPossible("Queen", posX, posY, toPosX, toPosY);
 
                         case "King":
-                            pieceId -= 9;
+                            pieceId -= offset;
                             return checkIfMoveIsPossible("King", posX, posY, toPosX, toPosY);
                     }
 
@@ -45,22 +42,19 @@ namespace Skak {
                             return checkIfMoveIsPossible("BlackPawn", posX, posY, toPosX, toPosY);
 
                         case "Knight":
-                        case "Knight2":
                             return checkIfMoveIsPossible("Knight", posX, posY, toPosX, toPosY);
 
                         case "Bishop":
-                        case "Bishop2":
                             return checkIfMoveIsPossible("Bishop", posX, posY, toPosX, toPosY);
 
                         case "Tower":
-                        case "Tower2":
                             return checkIfMoveIsPossible("Tower", posX, posY, toPosX, toPosY);
 
                         case "Queen":
                             return checkIfMoveIsPossible("Queen", posX, posY, toPosX, toPosY);
 
                         case "King":
-                            pieceId += 9;
+                            pieceId += offset;
                             return checkIfMoveIsPossible("King", posX, posY, toPosX, toPosY);
                     }
                     break;
