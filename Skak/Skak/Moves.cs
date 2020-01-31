@@ -37,42 +37,39 @@ namespace Skak {
         
 
         public void MovePieceLocation(string FromXY, string ToXY) {
-            Program Visual = new Program();
             MoveRules mr = new MoveRules();
-            InputReceiver IR = new InputReceiver();
             mr.CreatePieces();
-            int[] FromXYconverted = convertXYtoNums(FromXY);
+            int[] FromXYconverted = ConvertXYtoNums(FromXY);
           
-            if(pieceIsPlayers(FromXYconverted, Program.Player1Turn) == true) {
-                int[] ToXYconverted = convertXYtoNums(ToXY);
-                // Hvis rykket er muligt gøres dette:
+            if(PieceIsPlayers(FromXYconverted, Program.Player1Turn) == true) {
+                int[] ToXYconverted = ConvertXYtoNums(ToXY);
                 mr.PieceId = grid[FromXYconverted[1] - 1, FromXYconverted[0] - 1];
-                if (mr.MoveAllowedCheck(FromXYconverted[0], FromXYconverted[1], ToXYconverted[0], ToXYconverted[1])) {
-                    Program.Player1Turn = !Program.Player1Turn;
-                    Visuals.Board[ToXYconverted[1], ToXYconverted[0]] = Visuals.Board[FromXYconverted[1], FromXYconverted[0]];
-                    Visuals.Board[FromXYconverted[1], FromXYconverted[0]] = " ";
-                    //Offset på backend grid grundet den er 8x8 istedet for 9x9
+                if (mr.MoveAllowedCheck(FromXYconverted[0], FromXYconverted[1], ToXYconverted[0], ToXYconverted[1]) == true) {
+                    Program.Player1Turn = !Program.Player1Turn; // Skifter bool-værdien til den modsatte værdi 
+                    Visuals.Board[ToXYconverted[1], ToXYconverted[0]] = Visuals.Board[FromXYconverted[1], FromXYconverted[0]]; // Brikken fra from-pos bliver sat på to-pos
+                    Visuals.Board[FromXYconverted[1], FromXYconverted[0]] = " "; // Brikkens from-pos bliver til ingenting
+                    //Offset på backend grid grundet den er 8x8 istedet for 9x9 (Frontend grid er 9x9, da der er tilføjet A-H, 1-8 i siderne til koordination af position)
                     grid[ToXYconverted[1] - 1, ToXYconverted[0] - 1] = grid[FromXYconverted[1] - 1, FromXYconverted[0] - 1];
                     grid[FromXYconverted[1] - 1, FromXYconverted[0] - 1] = 0;
-                    Visual.ClearAndPrintBoard();
+                    Visuals.ClearAndPrintBoard();
                 }
             }
             else {
                 Console.WriteLine("You can't move that piece...");
                 Console.ReadKey();
-                Visual.ClearAndPrintBoard();
+                Visuals.ClearAndPrintBoard();
             }    
         }
 
         string possibleLetterPositions = "abcdefgh";
-        int[] convertXYtoNums(string XY) {
+        private int[] ConvertXYtoNums(string XY) {
             int[] XYconverted = new int[2];
             XYconverted[0] = possibleLetterPositions.IndexOf(char.ToLower(XY[0])) + 1;
             XYconverted[1] = Convert.ToInt32(XY[1].ToString());
             return XYconverted;
         }
 
-        private bool pieceIsPlayers(int[] FromXYconverted, bool Player1Turn) {
+        private bool PieceIsPlayers(int[] FromXYconverted, bool Player1Turn) {
             if(Visuals.Board[FromXYconverted[1], FromXYconverted[0]] != " ") {
                 if (Visuals.Board[FromXYconverted[1], FromXYconverted[0]].Any(char.IsUpper)) {
                     if (Player1Turn == true) {
@@ -89,7 +86,6 @@ namespace Skak {
         }
 
         private void PieceIdentification(int piece) {
-
             switch (piece) {
                 case (int)Pieces.Null - offset:
                     Piece Null;
@@ -207,7 +203,6 @@ namespace Skak {
             return pieces.Exists(x => x.Name == name && x.Color == color);
         }
 
-
         public void CreatePieces() {
             SetPiecePositions();
         }
@@ -217,7 +212,6 @@ namespace Skak {
 
                 PieceIdentification(x);
             }
-
         }
     }
 }

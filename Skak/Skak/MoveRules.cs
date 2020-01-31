@@ -33,7 +33,6 @@ namespace Skak {
                             pieceId -= offset;
                             return checkIfMoveIsPossible("King", posX, posY, toPosX, toPosY);
                     }
-
                     break;
 
                 case "Black":
@@ -58,17 +57,12 @@ namespace Skak {
                             return checkIfMoveIsPossible("King", posX, posY, toPosX, toPosY);
                     }
                     break;
-
-                case "Null":
-                    //error message: no piece in the spot
-                    break;
-
             }
             return false;
         }
 
         bool checkIfMoveIsPossible(string Piece, int posX, int posY, int toPosX, int toPosY) {
-            if (toPosIsntOnOwnPiece(toPosX, toPosY) == true) {
+            if (ToPosIsntOnOwnPiece(toPosX, toPosY) == true) {
                 switch (Piece) {
                     case "WhitePawn":
                         if (posY == 7 && posY - toPosY == 2) { // If pawn is on start pos (first move), let it move 2 ahead
@@ -94,13 +88,15 @@ namespace Skak {
             }
             return false;
         }
+      
+        bool ToPosIsntOnOwnPiece(int toPosX, int toPosY) {
+            if(IsDifferentColor(pieceId, grid[toPosY - 1, toPosX - 1]) == true) {
 
-        bool toPosIsntOnOwnPiece(int toPosX, int toPosY) {
-            if (IsDifferentColor(pieceId, grid[toPosY - 1, toPosX - 1]) == true) {
                 return true;
             }
             return false;
         }
+
 
         void checkIfGameEnd(int pieceId, int otherPieceId) {
             if (pieces[otherPieceId].Name == "King") {
