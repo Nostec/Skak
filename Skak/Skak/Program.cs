@@ -17,59 +17,40 @@ namespace Skak {
 
         void GameMenu() {
             Console.WriteLine("Welcome to a bad version of chess!");
+            Console.WriteLine("Type START or EXIT");
+            string menuInput = Console.ReadLine();
             while (true) {
-                Console.WriteLine("Type START, RULES or EXIT");
-                if (inputCall.Input().Equals("Start", StringComparison.OrdinalIgnoreCase)) {
+                if (menuInput.Equals("Start", StringComparison.OrdinalIgnoreCase)) {
                     break;
+                }
+                else if (menuInput.Equals("Exit", StringComparison.OrdinalIgnoreCase)) {
+                    Console.Clear();
+                    for (int i = 0; i < 10; i++) {
+                        Console.WriteLine("Bye :)");
+                    }
+                    Environment.Exit(1000);
                 }
             }
         }
 
         void RunGame() {
             while (true) {
-                ClearAndPrintBoard();
-                inputCall.moveFromOrTo("From");
-                ClearAndPrintBoard();
-                inputCall.moveFromOrTo("To");
+                Visuals.ClearAndPrintBoard();
+                inputCall.MoveFromOrTo("From");
+                Visuals.ClearAndPrintBoard();
+                inputCall.MoveFromOrTo("To");
                 if(gameEnd == true) {
                     break;
                 }
             }
         }
-
-
-        public void ClearAndPrintBoard() {
-            Console.Clear();
-            for (int x = 0; x < 9; x++) {
-                for (int y = 0; y < 9; y++) {
-                    Console.Write(string.Format(" {0} ", Visuals.Board[x, y]));
-                }
-                Console.Write(Environment.NewLine + Environment.NewLine);
-            }
-
-        }
-
-        static void ClearEverythingFromConsole(int line) {
-            for (int i = 0; i < 1; i++) {
-                Console.SetCursorPosition(0, line);
-                Console.Write(new string(' ', Console.WindowWidth));
-
-                line++;
-            }
-        } //Overskriver de forrige strings for ikke at skabe en "flashing" effeks som Console.Clear()
-
     }
 
-
-    class InputReceiver { // Skal måske flyttes til Moves.cs?
-        public string Input() {
-            return Console.ReadLine();
-        }
-
+    class InputReceiver {
         static Program Visual = new Program();
 
         public string[] XYinput = new string[2]; // Indexes: 0 = fraXY, 1 = tilXY
-        public void moveFromOrTo(string FromOrTo) {
+        public void MoveFromOrTo(string FromOrTo) {
             if (Program.Player1Turn == true) {
                 Console.WriteLine("Player 1 turn");
             }
@@ -88,14 +69,14 @@ namespace Skak {
 
         public void Move_XY_Input(string FromOrTo) {
             while (true) {
-                string positionInput = Input();
+                string positionInput = Console.ReadLine();
 
                 if (positionInput.Equals("Cancel", StringComparison.OrdinalIgnoreCase)) {
-                    Visual.ClearAndPrintBoard();
+                    Visuals.ClearAndPrintBoard();
                     break;
                 }
 
-                else if (isPosInputValid(positionInput, FromOrTo) == true) {
+                else if (PosInputIsValid(positionInput, FromOrTo) == true) {
                     if(FromOrTo == "To") {
                         Moves Moves = new Moves();
                         Moves.MovePieceLocation(XYinput[0], XYinput[1]);
@@ -105,9 +86,9 @@ namespace Skak {
                 else {
                     Console.WriteLine("Pos input isn't valid...");
                     Console.ReadKey();
-                    Visual.ClearAndPrintBoard();
+                    Visuals.ClearAndPrintBoard();
                     if(FromOrTo == "From") {
-                        moveFromOrTo("From");
+                        MoveFromOrTo("From");
                     }
                     break;
                 }
@@ -115,8 +96,8 @@ namespace Skak {
         }
 
 
-        private bool isPosInputValid(string positionInput, string FromOrTo) {
-            if (positionInput.Length == 2) { // Example: A1 (2 characters)
+        private bool PosInputIsValid(string positionInput, string FromOrTo) {
+            if (positionInput.Length == 2) { // Eksempel: A1 (2 chars)
                 if (XYinputIsWithinBoard(positionInput, FromOrTo) == true) {
                     return true;
                 }
