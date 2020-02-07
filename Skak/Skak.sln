@@ -1,9 +1,9 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 16
-VisualStudioVersion = 16.0.29418.71
+VisualStudioVersion = 16.0.29709.97
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Skak", "Skak\Skak.csproj", "{CBF8E430-098D-41A6-B31B-840418A682CF}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Skak", "Skak\Skak.csproj", "{38EB9E60-07DE-4CEE-A4A8-DFA655A02F48}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -11,15 +11,15 @@ Global
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{CBF8E430-098D-41A6-B31B-840418A682CF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{CBF8E430-098D-41A6-B31B-840418A682CF}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{CBF8E430-098D-41A6-B31B-840418A682CF}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{CBF8E430-098D-41A6-B31B-840418A682CF}.Release|Any CPU.Build.0 = Release|Any CPU
+		{38EB9E60-07DE-4CEE-A4A8-DFA655A02F48}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{38EB9E60-07DE-4CEE-A4A8-DFA655A02F48}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{38EB9E60-07DE-4CEE-A4A8-DFA655A02F48}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{38EB9E60-07DE-4CEE-A4A8-DFA655A02F48}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
-		SolutionGuid = {AE881483-2FA7-4FE5-857C-64C3FDB05718}
+		SolutionGuid = {BFCC51B3-359F-4929-BA07-42FE0061016D}
 	EndGlobalSection
 EndGlobal
