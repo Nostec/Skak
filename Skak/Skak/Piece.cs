@@ -1,10 +1,8 @@
 ﻿namespace Skak {
     class Piece {
-
-        private int id;             //den specifikke id på brikken
-        private string name;        //brikkens navn f.eks. konge, dronning etc.
-        private string color;       //brikkens farve e.g. sort og hvid
-
+        private int id; //den specifikke id på brikken
+        private string name; //brikkens navn f.eks. konge, dronning etc.
+        private string color; //brikkens farve e.g. sort og hvid
 
         public int Id {
             get => id;

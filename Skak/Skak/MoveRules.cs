@@ -62,7 +62,7 @@ namespace Skak {
         }
 
         bool checkIfMoveIsPossible(string Piece, int posX, int posY, int toPosX, int toPosY) {
-            if (ToPosIsntOnOwnPiece(toPosX, toPosY) == true) {
+            if (IsDifferentColor(pieceId, grid[toPosY - 1, toPosX - 1]) == true) {
                 switch (Piece) {
                     case "WhitePawn":
                         if (posY == 7 && posY - toPosY == 2) { // If pawn is on start pos (first move), let it move 2 ahead
@@ -88,29 +88,6 @@ namespace Skak {
             }
             return false;
         }
-      
-        bool ToPosIsntOnOwnPiece(int toPosX, int toPosY) {
-            if(IsDifferentColor(pieceId, grid[toPosY - 1, toPosX - 1]) == true) {
-
-                return true;
-            }
-            return false;
-        }
-
-
-        void checkIfGameEnd(int pieceId, int otherPieceId) {
-            if (pieces[otherPieceId].Name == "King") {
-                if (Program.Player1Turn == true) {
-                    Console.WriteLine("Player1 Won!");
-                }
-                else {
-                    Console.WriteLine("Player2 Won!");
-                }
-                Console.WriteLine("Press any key to end the game...");
-                Console.ReadKey();
-                Program.gameEnd = true;
-            }
-        }
 
         bool WhitePawnMoveIsPossible(int posX, int posY, int toPosX, int toPosY) {
             if (IsChoiceOfMove(posX - 1, posY - 1, toPosX, toPosY) == true) {
@@ -124,7 +101,7 @@ namespace Skak {
             else if (IsChoiceOfMove(posX, posY - 1, toPosX, toPosY) == true) {
                 int otherPieceId = Moves.grid[toPosY - 1, toPosX - 1];
                 otherPieceId += 9;
-                if (otherPieceId != 9) {
+                if (otherPieceId != 9) { // Hvis "To" pos indeholder en brik
                     return false;
                 }
                 PawnPromotionCheck(toPosY, posX, posY);
@@ -333,6 +310,13 @@ namespace Skak {
             return false;
         }
 
+        private bool IsChoiceOfMove(int posX, int posY, int toPosX, int toPosY) {
+            if (posX == toPosX && posY == toPosY) {
+                return true;
+            }
+            return false;
+        }
+
         bool BishopAndTowerMoveCheck(int toPosX, int toPosY) {
             if (onFinalPos == true && otherPiece == false && IsDifferentColor(pieceId, Moves.grid[toPosY - 1, toPosX - 1]) == true) {
                 return true;
@@ -340,14 +324,12 @@ namespace Skak {
             else if (onFinalPos == true && sameColorBlock == false && otherColorPiece < 2 && IsDifferentColor(pieceId, Moves.grid[toPosY - 1, toPosX - 1]) == true) {
                 return true;
             }
-            else {
-                return false;
-            }
+            return false;
         }
 
 
         void PawnPromotionCheck(int toPosY, int posX, int posY) {
-            if (toPosY == 1) { // If pawn location is on the furthest Y on the board
+            if (toPosY == 1) { // Hvis pawn's pos er på den længst væk Y værdi på boardet
                 PawnPromotion("White", posX, posY);
             }
             else if (toPosY == 8) {
@@ -361,11 +343,11 @@ namespace Skak {
                 if (promotionInput.Equals("Queen", StringComparison.OrdinalIgnoreCase)) {
                     if (Color == "White") {
                         Visuals.Board[posY, posX] = "Q";
-                        Moves.grid[posY - 1, posX - 1] = 8;
+                        Moves.grid[posY - 1, posX - 1] = 5;
                     }
                     else {
                         Visuals.Board[posY, posX] = "q";
-                        Moves.grid[posY - 1, posX - 1] = -8;
+                        Moves.grid[posY - 1, posX - 1] = -5;
                     }
                     break;
                 }
@@ -383,20 +365,16 @@ namespace Skak {
                 else if (promotionInput.Equals("Bishop", StringComparison.OrdinalIgnoreCase)) {
                     if (Color == "White") {
                         Visuals.Board[posY, posX] = "B";
-                        Moves.grid[posY - 1, posX - 1] = 6;
+                        Moves.grid[posY - 1, posX - 1] = 4;
                     }
                     else {
                         Visuals.Board[posY, posX] = "b";
-                        Moves.grid[posY - 1, posX - 1] = -6;
+                        Moves.grid[posY - 1, posX - 1] = -4;
                     }
                     break;
                 }
-                else {
-
-                }
             }
         }
-
 
         void IsPieceBlockingPath(int posY, int posX) {
             if (CheckIfOtherPiece(pieceId, Moves.grid[posY, posX]) == true) {
@@ -405,30 +383,6 @@ namespace Skak {
                 if (IsSameColor(pieceId, Moves.grid[posY, posX]) == true) {
                     sameColorBlock = true;
                 }
-            }
-        }
-        private bool IsChoiceOfMove(int posX, int posY, int toPosX, int toPosY) {
-            if (posX == toPosX && posY == toPosY) {
-                return true;
-            }
-            else {
-                return false;
-            }
-        }
-
-        private bool IsDifferentColor(int pieceId, int otherPieceId) {
-            //fjerner til id
-            pieceId += offset;
-            otherPieceId += offset;
-            if (pieces[otherPieceId].Color == "Null") {
-                return true;
-            }
-            else if (pieces[otherPieceId].Color != pieces[pieceId].Color && pieces[otherPieceId].Color != "Null") {
-                checkIfGameEnd(pieceId, otherPieceId);
-                return true;
-            }
-            else { // Samme brik farve eller out of bounds
-                return false;
             }
         }
 
@@ -445,6 +399,35 @@ namespace Skak {
             }
             else {
                 return false;
+            }
+        }
+
+        private bool IsDifferentColor(int pieceId, int otherPieceId) {
+            //fjerner til id
+            pieceId += offset;
+            otherPieceId += offset;
+            if (pieces[otherPieceId].Color == "Null") {
+                return true;
+            }
+            else if (pieces[otherPieceId].Color != pieces[pieceId].Color && pieces[otherPieceId].Color != "Null") {
+                checkIfGameEnd(otherPieceId);
+                return true;
+            }
+            else { // Samme brik farve eller out of bounds
+                return false;
+            }
+        }
+        void checkIfGameEnd(int otherPieceId) {
+            if (pieces[otherPieceId].Name == "King") {
+                if (Program.Player1Turn == true) {
+                    Console.WriteLine("Player1 Won!");
+                }
+                else {
+                    Console.WriteLine("Player2 Won!");
+                }
+                Console.WriteLine("Press any key to end the game...");
+                Console.ReadKey();
+                Program.gameEnd = true;
             }
         }
 

@@ -7,33 +7,32 @@ namespace Skak {
         public static bool Player1Turn = true;
         public static bool gameEnd = false;
         static void Main(string[] args) {
-            Program Visual = new Program();
-            Console.SetWindowSize(40, 5);
-            Console.Title = "Trash Chess";
-            Visual.GameMenu();
-            Console.SetWindowSize(35, 20);
-            Visual.RunGame();
+            Program Run = new Program();
+            Console.SetWindowSize(42, 5);
+            Console.Title = "C h e s s";
+            Run.GameMenu();
+            Console.SetWindowSize(29, 20);
+            Run.Game();
         }
 
         void GameMenu() {
-            Console.WriteLine("Welcome to a bad version of chess!");
-            Console.WriteLine("Type START or EXIT");
-            string menuInput = Console.ReadLine();
+            Console.WriteLine("Welcome to a different version of chess...");
             while (true) {
+                Console.WriteLine("Type START or EXIT");
+                string menuInput = Console.ReadLine();
                 if (menuInput.Equals("Start", StringComparison.OrdinalIgnoreCase)) {
                     break;
                 }
                 else if (menuInput.Equals("Exit", StringComparison.OrdinalIgnoreCase)) {
                     Console.Clear();
-                    for (int i = 0; i < 10; i++) {
-                        Console.WriteLine("Bye :)");
-                    }
-                    Environment.Exit(1000);
+                    Console.WriteLine("Bye :)...");
+                    System.Threading.Thread.Sleep(1000);
+                    Environment.Exit(0);
                 }
             }
         }
 
-        void RunGame() {
+        void Game() { // Kører spillet i et loop og breaker først når gameEnd er true
             while (true) {
                 Visuals.ClearAndPrintBoard();
                 inputCall.MoveFromOrTo("From");
@@ -47,8 +46,6 @@ namespace Skak {
     }
 
     class InputReceiver {
-        static Program Visual = new Program();
-
         public string[] XYinput = new string[2]; // Indexes: 0 = fraXY, 1 = tilXY
         public void MoveFromOrTo(string FromOrTo) {
             if (Program.Player1Turn == true) {
@@ -63,7 +60,6 @@ namespace Skak {
             else if (FromOrTo == "To") {
                 Console.Write($"{XYinput[0]} -> ");
             }
-            
             Move_XY_Input(FromOrTo);
         }
 
@@ -75,7 +71,6 @@ namespace Skak {
                     Visuals.ClearAndPrintBoard();
                     break;
                 }
-
                 else if (PosInputIsValid(positionInput, FromOrTo) == true) {
                     if(FromOrTo == "To") {
                         Moves Moves = new Moves();
@@ -87,7 +82,7 @@ namespace Skak {
                     Console.WriteLine("Pos input isn't valid...");
                     Console.ReadKey();
                     Visuals.ClearAndPrintBoard();
-                    if(FromOrTo == "From") {
+                    if(FromOrTo == "From") { // Undgår skiftet til "To" input
                         MoveFromOrTo("From");
                     }
                     break;
@@ -95,16 +90,12 @@ namespace Skak {
             }
         }
 
-
         private bool PosInputIsValid(string positionInput, string FromOrTo) {
             if (positionInput.Length == 2) { // Eksempel: A1 (2 chars)
-                if (XYinputIsWithinBoard(positionInput, FromOrTo) == true) {
-                    return true;
-                }
+                return XYinputIsWithinBoard(positionInput, FromOrTo);
             }
             return false;
         }
-
 
         private bool XYinputIsWithinBoard(string positionInput, string FromOrTo) {
             if (XYinputContainsValidChars(positionInput) == true) {

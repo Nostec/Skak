@@ -43,7 +43,6 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Exceptions.cs" />
     <Compile Include="MoveRules.cs" />
     <Compile Include="Moves.cs" />
     <Compile Include="Piece.cs" />

@@ -20,8 +20,8 @@ namespace Skak {
         protected List<Piece> pieces = new List<Piece>();
 
         ///Sorte brikker har - foran brikkens identitet, hvide har ingen
-        ///Rook/Tårn = 2&3, Springer/Knight = 4&5 Bishop/Løber = 6&7
-        ///Queen = 8, King = 9, Pawn = 1
+        ///Rook/Tårn = 2, Springer/Knight = 3, Bishop/Løber = 4
+        ///Queen = 5, King = 6, Pawn = 1
         ///Ingen brik = 0
         protected static int[,] grid = new int[8, 8]{
             {-2,-3,-4,-5,-6,-4,-3,-2},
@@ -38,7 +38,7 @@ namespace Skak {
 
         public void MovePieceLocation(string FromXY, string ToXY) {
             MoveRules mr = new MoveRules();
-            mr.CreatePieces();
+            mr.SetPiecePositions();
             int[] FromXYconverted = ConvertXYtoNums(FromXY);
           
             if(PieceIsPlayers(FromXYconverted, Program.Player1Turn) == true) {
@@ -203,13 +203,8 @@ namespace Skak {
             return pieces.Exists(x => x.Name == name && x.Color == color);
         }
 
-        public void CreatePieces() {
-            SetPiecePositions();
-        }
-          
         private void SetPiecePositions() {
             for (int x = -9; x <= 9; x++) {
-
                 PieceIdentification(x);
             }
         }

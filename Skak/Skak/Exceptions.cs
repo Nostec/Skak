@@ -1,5 +1,0 @@
-﻿namespace Skak {
-    class Exceptions {
-
-    }
-}
